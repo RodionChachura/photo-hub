@@ -6,7 +6,6 @@ from rest_framework import serializers
 from api.models import Album, Photo
 
 class PhotoSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="photo-detail")
     album = serializers.HyperlinkedRelatedField(view_name='album-detail', queryset=Album.objects)
     owner = serializers.HyperlinkedRelatedField(view_name='user-detail', queryset=User.objects)
 
@@ -16,7 +15,6 @@ class PhotoSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields=('creation_date')
 
 class AlbumSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="album-detail")
     owner = serializers.HyperlinkedRelatedField(view_name='user-detail', queryset=User.objects)
     photos = serializers.HyperlinkedRelatedField(view_name='photo-list',  queryset=Photo.objects, many=True)
 
@@ -31,16 +29,16 @@ class AlbumSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields=('creation_date')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="user-detail")
+    #url = serializers.HyperlinkedIdentityField(view_name="user-detail")
     albums = serializers.HyperlinkedRelatedField(many=True, view_name='album-list', queryset=Album.objects)
     #photos = serializers.HyperlinkedRelatedField(many=True, view_name='photo-list', queryset=Photo.objects)
 
-    #password = serializers.CharField(write_only=True, required=True)
-    #confirm_password = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('url', 'pk', 'username', 'email', 'password', 'is_staff', 'albums',)
+        fields = ('pk', 'username', 'email', 'password', 'confirm_password', 'is_staff', 'albums',)
         write_only_fields = ('password')
         read_only_fiels = ('pk')
 
