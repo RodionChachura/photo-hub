@@ -141,3 +141,6 @@ STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded_media')
 MEDIA_URL = '/media/'
+
+#NOSE_ARGS = ['--nocapture',
+#             '--nologcapture',]
