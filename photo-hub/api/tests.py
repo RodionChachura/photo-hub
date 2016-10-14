@@ -5,22 +5,62 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from rest_framework_jwt.settings import api_settings
 from .serializers import RegisterSerializer
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
+import os
 
-class UserTest(TestCase):
 
-    USERS = {
-        "usertest": {
-           "username": "UserTestUser",
-           "email": "UsertTestUser@mail.com",
-           "password": "UserTestPassword",
-           "confirm_password": "UserTestPassword",
+class Test(TestCase):
+
+    testUser = {
+           "username": "TestUser",
+           "email": "TestUser@mail.com",
+           "password": "TestUserPassword",
+           "confirm_password": "TestUserPassword"
         }
-    }
+    testAlbum = {
+            "name" : "Test Album"
+        }
+    testPhoto = {
+            "name" : "Test Photo",
+            "image" : open(os.path.join(settings.BASE_DIR, 'test_image_folder/test_image.jpg'), 'rb')
+        }
     def setUp(self):
         self.client = APIClient()
+        self.registerTestUser()
 
-    def test_register_then_login(self):
-        responce = self.client.post('/api/register/', self.USERS["usertest"], format="json")
-        self.assertEqual(responce.status_code, status.HTTP_201_CREATED)
-        responce = self.client.post('/api/login/', self.USERS["usertest"], format="json")
-        self.assertEqual(responce.status_code, status.HTTP_200_OK)
+    def registerTestUser(self):
+        response = self.client.post('/api/register/', self.testUser, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        if response.status_code == status.HTTP_200_OK:
+            self.client.credentials(
+                HTTP_AUTHORIZATION="{0} {1}".format(api_settings.JWT_AUTH_HEADER_PREFIX, response.data['token']))
+
+    def test_logout_login(self):
+        response = self.client.post('/api/logout/', format="json")
+        response = self.client.post('/api/login/', self.testUser, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+
+    def test_get_urls(self):
+        response = self.client.get('/api/albums/', format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        response = self.client.get('/api/photos/', format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+
+    def test_album_urls(self):
+        response = self.client.post('/api/albums/', self.testAlbum, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.content)
+        response = self.client.get('/api/albums/', format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        response = self.client.get('/api/albums/1/', format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        return True
+
+    def test_photos_urls(self):
+        response = self.client.post('/api/photos/', self.testPhoto, format="multipart")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.content)
+        response = self.client.get('/api/photos/', format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        response = self.client.get('/api/photos/1/', format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        return True

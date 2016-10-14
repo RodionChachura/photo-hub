@@ -7,7 +7,7 @@ obj/
 env/
 
 .sqlite3
-.config
+*.config
 .pyproj
 /ptvs_virtualenv_proxy.py
 

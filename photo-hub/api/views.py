@@ -6,19 +6,14 @@ from django.contrib.auth.models import User
 
 from api.permissions import IsOwnerOrReadOnly
 from api.models import Photo, Album
-from api.serializers import PhotoSerializer, AlbumSerializer, AccountSerializer, RegisterSerializer
+from api.serializers import PhotoSerializer, AlbumSerializer, RegisterSerializer, UserSerializer
+from rest_framework_jwt.views import JSONWebTokenAPIView
 
 
-class RegisterView(APIView):
+class RegisterView(JSONWebTokenAPIView):
     serializer_class = RegisterSerializer
     permission_classes = (permissions.AllowAny,)
 
-    def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
     queryset = User.objects.all()
@@ -26,14 +21,11 @@ class LogoutView(APIView):
         request.user.auth_token.delete()
         return Response(status.HTTP_200_OK)
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = AccountSerializer
-
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -44,3 +36,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer 
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
