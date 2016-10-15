@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
+from rest_framework import generics
 from rest_framework import viewsets, status 
 from django.contrib.auth.models import User
 
@@ -18,8 +19,11 @@ class RegisterView(JSONWebTokenAPIView):
 class LogoutView(APIView):
     queryset = User.objects.all()
     def get(self, request, format=None):
-        request.user.auth_token.delete()
-        return Response(status.HTTP_200_OK)
+        if request.user.is_authenthicated():
+            request.user.auth_token.delete()
+            return Response(status.HTTP_200_OK)
+        else:
+            return Response(status.HTTP_401_UNAUTHORIZED)
 
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
@@ -27,16 +31,16 @@ class PhotoViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(user=self.request.user)
 
 class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(user=self.request.user)
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from api.models import Album, Photo
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from rest_framework import status
@@ -41,18 +42,12 @@ class Test(TestCase):
         response = self.client.post('/api/login/', self.testUser, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
 
-    def test_get_urls(self):
-        response = self.client.get('/api/albums/', format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-        response = self.client.get('/api/photos/', format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-
     def test_album_urls(self):
         response = self.client.post('/api/albums/', self.testAlbum, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.content)
         response = self.client.get('/api/albums/', format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-        response = self.client.get('/api/albums/1/', format="json")
+        response = self.client.get('/api/albums/{}/'.format(Album.objects.last().pk), format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
         return True
 
@@ -61,6 +56,13 @@ class Test(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.content)
         response = self.client.get('/api/photos/', format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-        response = self.client.get('/api/photos/1/', format="json")
+        response = self.client.get('/api/photos/{}/'.format(Photo.objects.last().pk), format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        return True
+
+    def test_users_urls(self):
+        response = self.client.get('/api/users/', format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        response = self.client.get('/api/users/{}/'.format(User.objects.last().pk), format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
         return True
