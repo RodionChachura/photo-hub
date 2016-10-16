@@ -5,6 +5,13 @@
 bin/
 obj/
 env/
+uploaded_media/
+
+test_image_folder/
+node_modules/
+bower_components/
+typings/
+
 
 .sqlite3
 *.config
