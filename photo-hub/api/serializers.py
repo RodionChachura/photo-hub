@@ -41,7 +41,8 @@ class AlbumSerializer(serializers.HyperlinkedModelSerializer):
 
 class RegisterSerializer(JSONWebTokenSerializer):
     password = serializers.CharField(write_only=True, required=True)
-    confirm_password = serializers.CharField(write_only=True, required=True)
+    username = serializers.CharField(required=True)
+    email = serializers.CharField(required=True)
 
     def __init__(self, *args, **kwargs):
         """
@@ -55,8 +56,8 @@ class RegisterSerializer(JSONWebTokenSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'confirm_password',)
-        write_only_fields = ('password', 'confirm_password',)
+        fields = ('username', 'email', 'password',)
+        write_only_fields = ('password',)
     
     def createUser(self, validated_data):
         user = User.objects.create(
@@ -70,9 +71,6 @@ class RegisterSerializer(JSONWebTokenSerializer):
     def registrationValidation(self, data):
         if len(data['password']) < 6:
             raise serializers.ValidationError("Too short password")
-        if data['password']:
-            if data['password'] != data['password']:
-                raise serializers.ValidationError("The passwords have to be the same")
         if User.objects.filter(username=data['username']).exists():
             raise serializers.ValidationError("This username alredy in use")
         if User.objects.filter(email=data['email']).exists():

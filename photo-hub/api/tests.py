@@ -16,8 +16,7 @@ class Test(TestCase):
     testUser = {
            "username": "TestUser",
            "email": "TestUser@mail.com",
-           "password": "TestUserPassword",
-           "confirm_password": "TestUserPassword"
+           "password": "TestUserPassword"
         }
     testAlbum = {
             "name" : "Test Album"
