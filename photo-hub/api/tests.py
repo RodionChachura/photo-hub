@@ -18,6 +18,14 @@ class Test(TestCase):
            "email": "TestUser@mail.com",
            "password": "TestUserPassword"
         }
+    loginTestUserWithUsername = {
+           "username": "TestUser",
+           "password": "TestUserPassword"
+        }
+    loginTestUserWithEmail = {
+            "email": "TestUser@mail.com",
+            "password": "TestUserPassword"
+        }
     testAlbum = {
             "name" : "Test Album"
         }
@@ -38,7 +46,10 @@ class Test(TestCase):
 
     def test_logout_login(self):
         response = self.client.post('/api/logout/', format="json")
-        response = self.client.post('/api/login/', self.testUser, format="json")
+        response = self.client.post('/api/login/', self.loginTestUserWithUsername, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        response = self.client.post('/api/logout/', format="json")
+        response = self.client.post('/api/login/', self.loginTestUserWithEmail, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
 
     def test_album_urls(self):

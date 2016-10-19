@@ -10,9 +10,9 @@ router.register(r'photos', views.PhotoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^login/', obtain_jwt_token),
     url(r'^token-refresh/', refresh_jwt_token),
     url(r'^token-verify/', verify_jwt_token),
+    url(r'^login/', views.LoginView.as_view()),
     url(r'^register/', views.RegisterView.as_view()),
     url(r'^logout/', views.LogoutView.as_view())
 ]

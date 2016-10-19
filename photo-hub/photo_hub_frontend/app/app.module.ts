@@ -4,9 +4,21 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { Headers, RequestOptions, BaseRequestOptions} from '@angular/http';
 
+import { AuthenticationService } from './services/authentication.service'
+import { ConfigService } from './services/config.service'
+import { NotificationService } from './services/notification.service'
+import { UserService } from './services/user.service'
+
 import { routing } from './app.routes';
+
+import { EqualValidator } from './directives/equal-validator.directive'
+
 import { AppComponent }  from './app.component';
+import { AuthGuard } from './guards/auth.guard'
 import { HomeComponent }  from './components/home.component';
+import { LoginComponent }  from './components/login/login.component';
+import { RegisterComponent }  from './components/register/register.component';
+
 
 class AppBaseRequestOptions extends BaseRequestOptions {
     headers: Headers = new Headers();
@@ -25,13 +37,19 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         HttpModule,
         routing
     ],
-    declarations: 
-    [
+    declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
+        LoginComponent,
+        RegisterComponent,
+        EqualValidator
     ],
-    providers: 
-    [,
+    providers: [
+        AuthGuard,
+        AuthenticationService,
+        ConfigService,
+        NotificationService,
+        UserService,
         { provide: RequestOptions, useClass: AppBaseRequestOptions }],
     bootstrap: [AppComponent]
 })

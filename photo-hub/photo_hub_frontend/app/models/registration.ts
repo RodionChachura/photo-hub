@@ -1,16 +1,16 @@
 export class Registration {
     Username: string;
+    Email: string;
     Password: string;
     ConfirmPassword: string;
-    Email: string;
 
     constructor(username: string,
-        password: string,
-        confirmpassword: string,
-        email: string) {
+        email: string,
+        confirmPassword,
+        password: string) {
         this.Username = username;
-        this.Password = password;
-        this.ConfirmPassword = confirmpassword;
         this.Email = email;
+        this.Password = password;
+        this.ConfirmPassword = confirmPassword;
     }
 }

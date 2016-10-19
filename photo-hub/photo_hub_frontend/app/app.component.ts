@@ -8,10 +8,18 @@ export class AppComponent {
     constructor() {}
 
     isUserLoggedIn(): boolean{
-        return true;
+        if(localStorage.getItem('currentUser'))
+            return true;
+        return false;
     }
 
     getUserName(): string{
+        if (localStorage.getItem('currentUser'))
+            return JSON.parse(localStorage.getItem('currentUser')).username;
         return 'Account'
+    }
+
+    logout() {
+        localStorage.removeItem('currentUser');
     }
  }

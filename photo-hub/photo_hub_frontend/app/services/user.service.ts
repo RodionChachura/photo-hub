@@ -14,11 +14,12 @@ export class UserService {
     getById(id) {
         return this.http.get(this.configService.usersApiURI + id, this.jwt()).map((response: Response) => response.json());
     }
-    // doesn't have realization on backend side
-    create(registration) {
-        return this.http.post(this.configService.registerApiURI, registration, this.jwt()).map((response: Response) => response.json());
+
+    register(user)
+    {
+        return this.http.post(this.configService.registerApiURI, user, this.jwt()).map((response: Response) => response.json());
     }
- 
+    // doesn't have realization on backend side 
     update(user) {
         return this.http.put(this.configService.usersApiURI + user.id, user, this.jwt()).map((response: Response) => response.json());
     }

@@ -4,9 +4,10 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.decorators import detail_route
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
 from rest_framework_jwt.settings import api_settings
 from rest_framework import mixins
+from rest_framework_jwt.compat import Serializer as JWTSerializer
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
@@ -40,10 +41,6 @@ class AlbumSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields=('creation_date',)
 
 class RegisterSerializer(JSONWebTokenSerializer):
-    password = serializers.CharField(write_only=True, required=True)
-    username = serializers.CharField(required=True)
-    email = serializers.CharField(required=True)
-
     def __init__(self, *args, **kwargs):
         """
         Dynamically add the USERNAME_FIELD to self.fields.
@@ -51,13 +48,8 @@ class RegisterSerializer(JSONWebTokenSerializer):
         super(JSONWebTokenSerializer, self).__init__(*args, **kwargs)
 
         self.fields[self.username_field] = serializers.CharField()
-        self.fields['email'] = serializers.CharField(write_only=True)
+        self.fields['email'] = serializers.EmailField()
         self.fields['password'] = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password',)
-        write_only_fields = ('password',)
     
     def createUser(self, validated_data):
         user = User.objects.create(
@@ -75,8 +67,12 @@ class RegisterSerializer(JSONWebTokenSerializer):
             raise serializers.ValidationError("This username alredy in use")
         if User.objects.filter(email=data['email']).exists():
             raise serializers.ValidationError("User with this email alredy exists")
-        if len(data['username']) < 2:
+        if len(data['username']) < 5:
             raise serializers.ValidationError("Too short username")
+        if len(data['username']) > 20:
+            raise serializers.ValidationError("Too long username")
+        if '@' in data['username']:
+            raise serializers.ValidationError("Username cannot contain '@' cymbol")
  
     def validate(self, attrs):
         self.registrationValidation(attrs)
@@ -84,7 +80,55 @@ class RegisterSerializer(JSONWebTokenSerializer):
 
         payload = jwt_payload_handler(user)
 
-        return {
+        return { 
             'token': jwt_encode_handler(payload),
-            'user': user
+            'username': user.username,
+            'pk': user.pk
         }
+
+class LoginSerializer(JSONWebTokenSerializer):
+    def __init__(self, *args, **kwargs):
+        """
+        Dynamically add the USERNAME_FIELD to self.fields.
+        """
+        super(JSONWebTokenSerializer, self).__init__(*args, **kwargs)
+
+        self.fields[self.username_field] = serializers.CharField(required=False)
+        self.fields['email'] = serializers.CharField(required=False)
+        self.fields['password'] = serializers.CharField(write_only=True)
+ 
+    def validate(self, attrs):
+        '''
+            login with username or email
+        '''
+        if 'username' in attrs:
+            username = attrs['username']
+        if 'email' in attrs:
+            user = User.objects.get(email=attrs['email'])
+            if user == None:
+                raise serializers.ValidationError("Email is invalid")
+            username = user.username
+
+        credentials = {
+            'username': username,
+            'password': attrs.get('password')
+        }
+
+        if all(credentials.values()):
+            user = authenticate(**credentials)
+
+            if user:
+                if not user.is_active:
+                    raise serializers.ValidationError('User account is disabled.')
+
+                payload = jwt_payload_handler(user)
+
+                return {
+                    'token': jwt_encode_handler(payload),
+                    'username': user.username,
+                    'pk': user.pk
+                }
+            else:
+                raise serializers.ValidationError('Unable to login with provided credentials.')
+        else:
+            raise serializers.ValidationError('Credentials are invalid')
