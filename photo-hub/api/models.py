@@ -8,7 +8,7 @@ def get_image_path(instance, filename):
 
 
 class Album(models.Model):
-    user = models.ForeignKey(User,  related_name='albums', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='albums', on_delete=models.CASCADE)
     name = models.CharField(max_length=80, default='New album')
     creation_date = models.DateField(auto_now_add=True)
 

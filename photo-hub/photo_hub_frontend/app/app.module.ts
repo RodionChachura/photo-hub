@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { Headers, RequestOptions, BaseRequestOptions} from '@angular/http';
 
+import { DataService } from './services/data.service'
 import { AuthenticationService } from './services/authentication.service'
 import { ConfigService } from './services/config.service'
 import { NotificationService } from './services/notification.service'
@@ -49,6 +50,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         AuthenticationService,
         ConfigService,
         NotificationService,
+        DataService,
         UserService,
         { provide: RequestOptions, useClass: AppBaseRequestOptions }],
     bootstrap: [AppComponent]

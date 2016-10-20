@@ -1,12 +1,24 @@
 from django.conf.urls import include, url
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
-from rest_framework import routers
-from api import views
+from rest_framework.routers import DefaultRouter
+from api import views, viewsets
 
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'albums', views.AlbumViewSet)
-router.register(r'photos', views.PhotoViewSet)
+from rest_framework_extensions.routers import ExtendedSimpleRouter
+
+router = ExtendedSimpleRouter()
+(
+    router.register(r'users', viewsets.UserViewSet)
+          .register(r'albums', viewsets.AlbumViewSet, base_name='users-albums', parents_query_lookups=['user'])
+)
+(
+    router.register(r'users', viewsets.UserViewSet)
+          .register(r'photos', viewsets.PhotoViewSet, base_name='users-photos', parents_query_lookups=['user'])
+)
+router.register(r'albums', viewsets.AlbumViewSet)
+router.register(r'photos', viewsets.PhotoViewSet)
+
+
+
 
 urlpatterns = [
     url(r'^', include(router.urls)),

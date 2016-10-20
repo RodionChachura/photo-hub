@@ -29,10 +29,13 @@ class Test(TestCase):
     testAlbum = {
             "name" : "Test Album"
         }
-    testPhoto = {
+    
+    def get_testPhoto(self):
+        return {
             "name" : "Test Photo",
             "image" : open(os.path.join(settings.BASE_DIR, 'test_image_folder/test_image.jpg'), 'rb')
         }
+
     def setUp(self):
         self.client = APIClient()
         self.registerTestUser()
@@ -62,7 +65,7 @@ class Test(TestCase):
         return True
 
     def test_photos_urls(self):
-        response = self.client.post('/api/photos/', self.testPhoto, format="multipart")
+        response = self.client.post('/api/photos/', self.get_testPhoto(), format="multipart")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.content)
         response = self.client.get('/api/photos/', format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
@@ -74,5 +77,12 @@ class Test(TestCase):
         response = self.client.get('/api/users/', format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
         response = self.client.get('/api/users/{}/'.format(User.objects.last().pk), format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        #nested routers testing
+        self.test_album_urls()
+        self.test_photos_urls()
+        response = self.client.get('/api/users/{}/albums/'.format(User.objects.last().pk), format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        response = self.client.get('/api/users/{}/photos/'.format(User.objects.last().pk), format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
         return True

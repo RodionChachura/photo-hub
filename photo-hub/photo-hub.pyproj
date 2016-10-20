@@ -44,6 +44,9 @@
     </Compile>
     <Compile Include="api\tests.py" />
     <Compile Include="api\views.py" />
+    <Compile Include="api\viewsets.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="api\__init__.py" />
     <Compile Include="api\urls.py">
       <SubType>Code</SubType>

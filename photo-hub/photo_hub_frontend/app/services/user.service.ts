@@ -7,7 +7,7 @@ export class UserService {
     constructor(private configService: ConfigService, 
                 private http: Http) { }
  
-    getAll() {
+    getAllUsers() {
         return this.http.get(this.configService.usersApiURI, this.jwt()).map((response: Response) => response.json());
     }
  
@@ -18,14 +18,6 @@ export class UserService {
     register(user)
     {
         return this.http.post(this.configService.registerApiURI, user, this.jwt()).map((response: Response) => response.json());
-    }
-    // doesn't have realization on backend side 
-    update(user) {
-        return this.http.put(this.configService.usersApiURI + user.id, user, this.jwt()).map((response: Response) => response.json());
-    }
- 
-    delete(id) {
-        return this.http.delete(this.configService.usersApiURI + id, this.jwt()).map((response: Response) => response.json());
     }
  
     // private helper methods

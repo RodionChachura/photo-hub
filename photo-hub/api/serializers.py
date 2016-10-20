@@ -1,31 +1,19 @@
-from django.utils import timezone
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
-from rest_framework.decorators import detail_route
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from django.contrib.auth import authenticate
 from rest_framework_jwt.settings import api_settings
-from rest_framework import mixins
-from rest_framework_jwt.compat import Serializer as JWTSerializer
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 from api.models import Album, Photo
-import api
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    albums = serializers.HyperlinkedRelatedField(view_name='album-detail',  queryset=Album.objects, many=True, required=False)
-    photos = serializers.HyperlinkedRelatedField(view_name='photo-detail',  queryset=Photo.objects, many=True, required=False)
-
-    class Meta:
-        model = User
-        fields = ('url', 'pk', 'username', 'email', 'albums', 'photos')
 
 class PhotoSerializer(serializers.HyperlinkedModelSerializer):
     album = serializers.HyperlinkedRelatedField(view_name='album-detail', queryset=Album.objects, required=False)
     user = serializers.HyperlinkedRelatedField(view_name='user-detail', queryset=User.objects, required=False)
-
+    
     class Meta:
         model = Photo
         fields = ('url', 'pk', 'name', 'image', 'creation_date', 'user', 'album',)
@@ -34,11 +22,17 @@ class PhotoSerializer(serializers.HyperlinkedModelSerializer):
 class AlbumSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(view_name='user-detail', queryset=User.objects, required=False)
     photos = serializers.HyperlinkedRelatedField(view_name='photo-list',  queryset=Photo.objects, many=True, required=False)
+    #totalPhotos = serializers.SerializerMethodField()
 
     class Meta:
         model = Album
         fields = ('url', 'pk', 'name', 'creation_date', 'user', 'photos',)
         read_only_fields=('creation_date',)
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('url', 'pk', 'username', 'email', 'albums', 'photos')
 
 class RegisterSerializer(JSONWebTokenSerializer):
     def __init__(self, *args, **kwargs):
