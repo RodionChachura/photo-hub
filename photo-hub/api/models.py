@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os
-from django.utils import timezone
+import uuid
 
 def get_image_path(instance, filename):
-    return instance.user.username + '//' + ''.join(str(timezone.now()).replace(' ', '').replace(':', ''))  + '//'
+    return '{}.{}'.format(uuid.uuid4(), filename.split('.')[-1])
 
 
 class Album(models.Model):
@@ -17,7 +17,6 @@ class Album(models.Model):
 
     class Meta:
         ordering = ['creation_date', ]
-
 
 class Photo(models.Model):
     user = models.ForeignKey(User,  related_name='photos', on_delete=models.CASCADE)

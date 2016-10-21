@@ -15,7 +15,7 @@ export class AuthenticationService {
             var json = JSON.stringify({ email: usernameOrPassword, password: password })
         else
             var json = JSON.stringify({ username: usernameOrPassword, password: password })
-        return this.http.post(this.configService.loginApiURI, json)
+        return this.http.post(this.configService.loginApiUrl, json)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
@@ -27,7 +27,7 @@ export class AuthenticationService {
     }
 
     register(username: string, email: string, password: string){
-        return this.http.post(this.configService.registerApiURI, JSON.stringify({ username: username, email: email, password: password }))
+        return this.http.post(this.configService.registerApiUrl, JSON.stringify({ username: username, email: email, password: password }))
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();

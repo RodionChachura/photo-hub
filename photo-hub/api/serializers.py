@@ -9,30 +9,70 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 from api.models import Album, Photo
 
-
-class PhotoSerializer(serializers.HyperlinkedModelSerializer):
-    album = serializers.HyperlinkedRelatedField(view_name='album-detail', queryset=Album.objects, required=False)
+class RelatedToUserModelSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(view_name='user-detail', queryset=User.objects, required=False)
-    
+    username = serializers.SerializerMethodField()
+
+    def get_username(self, obj):
+        return obj.user.username
+
+class PhotoBaseSerializer(RelatedToUserModelSerializer):
+    album = serializers.HyperlinkedRelatedField(view_name='album-detail', queryset=Album.objects, required=False)
+    albumname = serializers.SerializerMethodField()
+
+    def get_albumname(self, obj):
+        if obj.album:
+            return obj.album.name
+        else:
+            return ''
+
+class PhotoDetailSerializer(PhotoBaseSerializer):
     class Meta:
         model = Photo
-        fields = ('url', 'pk', 'name', 'image', 'creation_date', 'user', 'album',)
+        fields = ('name', 'image', 'creation_date', 'album', 'albumname', 'user', 'username')
         read_only_fields=('creation_date', )
 
-class AlbumSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(view_name='user-detail', queryset=User.objects, required=False)
+class PhotoSerializer(PhotoBaseSerializer):
+    class Meta:
+        model = Photo
+        fields = ('url', 'name', 'image', 'creation_date', 'album', 'albumname', 'user', 'username')
+        read_only_fields=('url', 'creation_date', 'album', 'albumname', 'user', 'username')
+
+
+class AlbumBaseSerializer(RelatedToUserModelSerializer):
+    totalPhotos = serializers.SerializerMethodField()
+
+    def get_totalPhotos(self, obj):
+        try:
+            return Photo.objects.get(album_id=obj.pk).count()
+        except Photo.DoesNotExist:
+            return 0
+
+class AlbumSerializer(AlbumBaseSerializer):
+    class Meta:
+        model = Album
+        fields = ('url', 'name', 'creation_date', 'totalPhotos', 'user', 'username')
+        read_only_fields=('url', 'creation_date', 'totalPhotos', 'user', 'username')
+
+class AlbumDetailSerializer(AlbumBaseSerializer):
     photos = serializers.HyperlinkedRelatedField(view_name='photo-list',  queryset=Photo.objects, many=True, required=False)
-    #totalPhotos = serializers.SerializerMethodField()
 
     class Meta:
         model = Album
-        fields = ('url', 'pk', 'name', 'creation_date', 'user', 'photos',)
-        read_only_fields=('creation_date',)
+        fields = ('name', 'creation_date', 'user', 'photos', 'totalPhotos')
+        read_only_fields=('url', 'creation_date', 'totalPhotos', 'user', 'username')
+
+
+class UserDetailSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username',)
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'pk', 'username', 'email', 'albums', 'photos')
+        fields = ('url', 'username',)
+
 
 class RegisterSerializer(JSONWebTokenSerializer):
     def __init__(self, *args, **kwargs):

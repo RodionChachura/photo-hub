@@ -3,9 +3,9 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify
 from rest_framework.routers import DefaultRouter
 from api import views, viewsets
 
-from rest_framework_extensions.routers import ExtendedSimpleRouter
+from rest_framework_extensions.routers import ExtendedSimpleRouter, ExtendedDefaultRouter
 
-router = ExtendedSimpleRouter()
+router = ExtendedDefaultRouter()
 (
     router.register(r'users', viewsets.UserViewSet)
           .register(r'albums', viewsets.AlbumViewSet, base_name='users-albums', parents_query_lookups=['user'])

@@ -5,7 +5,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 
 from api.permissions import IsOwnerOrReadOnly
-from api.serializers import RegisterSerializer, LoginSerializer
+from api.serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from rest_framework_jwt.views import JSONWebTokenAPIView
 
 

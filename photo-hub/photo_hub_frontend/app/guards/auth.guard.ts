@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
+import { NotificationService } from '../services/notification.service'
  
 @Injectable()
 export class AuthGuard implements CanActivate {
  
-    constructor(private router: Router) { }
+    constructor(private router: Router,
+        private notificationService : NotificationService) { }
  
     canActivate() {
         if (localStorage.getItem('currentUser')) {
@@ -13,6 +15,7 @@ export class AuthGuard implements CanActivate {
         }
  
         // not logged in so redirect to login page
+        this.notificationService.printErrorMessage('At first you need to login')
         this.router.navigate(['/login']);
         return false;
     }

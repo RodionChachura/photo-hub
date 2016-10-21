@@ -2,14 +2,22 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ConfigService {
-    public apiURI : string = 'http://localhost:8000/api/';
-    public loginApiURI = this.apiURI + 'login/';
-    public registerApiURI = this.apiURI + 'register/';
+    public apiUrl: string = 'http://localhost:8000/api/';
+    public loginApiUrl: string = this.apiUrl + 'login/';
+    public registerApiUrl: string = this.apiUrl + 'register/';
 
-    public usersApiURI = this.apiURI + 'users/';
-    public albumsApiURI = this.apiURI + 'albums/';
-    public photosApiURI = this.apiURI + 'photos/';
-        
-    
-    constructor() {}
+    public usersApiUrl: string = this.apiUrl + 'users/';
+    public albumsApiUrl: string = this.apiUrl + 'albums/';
+    public photosApiUrl: string = this.apiUrl + 'photos/';
+
+
+    constructor() { }
+
+    public getUserAlbumsUrl(url: string): string{
+        return url + 'albums/'
+    }
+
+    public getUserPhotosUrl(url: string): string{
+        return url + 'photos/'
+    }
 }

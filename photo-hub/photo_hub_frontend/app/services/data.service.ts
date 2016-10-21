@@ -3,23 +3,22 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { ConfigService } from './config.service'
  
 @Injectable()
-export class UserService {
-    constructor(private configService: ConfigService, 
-                private http: Http) { }
- 
-    getAllUsers() {
-        return this.http.get(this.configService.usersApiURI, this.jwt()).map((response: Response) => response.json());
-    }
- 
-    getById(id) {
-        return this.http.get(this.configService.usersApiURI + id, this.jwt()).map((response: Response) => response.json());
+export class DataService {
+    constructor(private http: Http,
+        private configService: ConfigService) { }
+
+    get(url: string, json=true){
+        return this.http.get(url, this.jwt()).map((response: Response) => json? response.json() : response);        
     }
 
-    register(user)
-    {
-        return this.http.post(this.configService.registerApiURI, user, this.jwt()).map((response: Response) => response.json());
+    post(url: string, data){
+        return this.http.post(url, data, this.jwt()).map((response: Response) => response.json());
     }
- 
+
+    delete(url: string){
+        return this.http.post(url, this.jwt()).map((response: Response) => response.json());
+    }
+
     // private helper methods
  
     private jwt() {
