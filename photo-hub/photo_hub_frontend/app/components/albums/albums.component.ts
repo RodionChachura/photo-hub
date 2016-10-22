@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router'; 
+
 import { Album } from '../../models/album';
 
 import { AlbumsDataService } from '../../services/albums-data.service';
-import { UsersDataService } from '../../services/users-data.service';
 import { ConfigService } from '../../services/config.service';
 import { UtilityService } from '../../services/utility.service';
 
@@ -12,16 +13,21 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class AlbumsComponent implements OnInit {
     private _albums: Array<Album>;
+    private username: string
 
-    constructor(private configService: ConfigService,
+    constructor(private route: ActivatedRoute,
+        private router: Router,
+        private configService: ConfigService,
         private albumsDataService : AlbumsDataService,
-        private usersDataService : UsersDataService,
         private utilityService: UtilityService) {}
 
 
     ngOnInit() {
-        this._albums = this.albumsDataService
-            .getUserAlbums(this.usersDataService.getCurrentUserUrl())
+        this.route.queryParams.subscribe(params =>{
+            this.username = params['username'] || '';
+        })
+        if (this.username != '')
+            this.albumsDataService.getAlbumsByUsername(this.username)
     }
 
     convertDateTime(date: Date) {

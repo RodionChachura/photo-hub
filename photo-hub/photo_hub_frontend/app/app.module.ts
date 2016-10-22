@@ -8,7 +8,6 @@ import { DataService } from './services/data.service'
 
 import { AlbumsDataService } from './services/albums-data.service'
 import { PhotosDataService } from './services/photos-data.service'
-import { UsersDataService } from './services/users-data.service'
 
 
 import { AuthenticationService } from './services/authentication.service'
@@ -67,7 +66,6 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         DataService,
         AlbumsDataService,
         PhotosDataService,
-        UsersDataService,
         UtilityService,
         { provide: RequestOptions, useClass: AppBaseRequestOptions }],
     bootstrap: [AppComponent]

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router'; 
+
 import { Photo } from '../../models/photo';
-import { Album } from '../../models/album';
+
 import { PhotosDataService } from '../../services/photos-data.service';
-import { UsersDataService } from '../../services/users-data.service';
+import { ConfigService } from '../../services/config.service';
+import { UtilityService } from '../../services/utility.service';
 
 
 @Component({
@@ -11,12 +14,19 @@ import { UsersDataService } from '../../services/users-data.service';
 })
 export class PhotosComponent implements OnInit {
     private _photos: Array<Photo>;
+    private username: string
 
-    constructor(public dataService: PhotosDataService,
-        public usersDataService: UsersDataService) {
-    }
+    constructor(private route: ActivatedRoute,
+        private router: Router,
+        private configService: ConfigService,
+        private photosDataService : PhotosDataService,
+        private utilityService: UtilityService) {}
 
     ngOnInit() {
-        this._photos = this.dataService.getUserPhotos(this.usersDataService.getCurrentUserUrl())
+        this.route.queryParams.subscribe(params =>{
+            this.username = params['username'] || '';
+        })
+        if (this.username != '')
+            this.photosDataService.getPhotosByUsername(this.username)
     }
 }

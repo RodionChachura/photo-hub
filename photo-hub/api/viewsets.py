@@ -5,25 +5,20 @@ from django.contrib.auth.models import User
 
 from api.permissions import IsOwnerOrReadOnly
 from api.models import Photo, Album
-from api.serializers import PhotoSerializer, PhotoDetailSerializer, AlbumSerializer, AlbumDetailSerializer, UserSerializer, UserDetailSerializer
+from api.serializers import PhotoSerializer, AlbumSerializer, AlbumDetailSerializer, UserSerializer
 
-from rest_framework_extensions.mixins import NestedViewSetMixin
 
-class PhotoViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
-
-    def get_serializer_class(self):
-        if hasattr(self, 'action') and self.action == 'retrieve':
-            return PhotoDetailSerializer
-        return PhotoSerializer
+    serializer_class = PhotoSerializer
+    permission_classes = (IsOwnerOrReadOnly, permissions.IsAuthenticated)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class AlbumViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly, permissions.IsAuthenticated)
 
     def get_serializer_class(self):
         if hasattr(self, 'action') and self.action == 'retrieve':
@@ -33,12 +28,6 @@ class AlbumViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class UserViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
-
-    def get_serializer_class(self):
-        if hasattr(self, 'action') and self.action == 'retrieve':
-            return UserDetailSerializer
-        return UserSerializer

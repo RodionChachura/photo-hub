@@ -9,34 +9,27 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 from api.models import Album, Photo
 
-class RelatedToUserModelSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(view_name='user-detail', queryset=User.objects, required=False)
-    username = serializers.SerializerMethodField()
+class RelatedToUserModelSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(read_only=True)
+    username = serializers.SerializerMethodField(read_only=True)
 
     def get_username(self, obj):
-        return obj.user.username
+        return User.objects.get(id=obj.user_id).username
 
-class PhotoBaseSerializer(RelatedToUserModelSerializer):
-    album = serializers.HyperlinkedRelatedField(view_name='album-detail', queryset=Album.objects, required=False)
-    albumname = serializers.SerializerMethodField()
+class PhotoSerializer(RelatedToUserModelSerializer):
+    album_id = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    albumname = serializers.SerializerMethodField(read_only=True, required=False)
+
+    class Meta:
+        model = Photo
+        fields = ('id', 'name', 'image', 'creation_date', 'album_id', 'albumname', 'user_id', 'username')
+        read_only_fields=('id', 'creation_date', 'album_id', 'albumname', 'user_id', 'username')
 
     def get_albumname(self, obj):
-        if obj.album:
-            return obj.album.name
+        if obj.album_id:
+            return Album.objects.get(id=album_id).name
         else:
             return ''
-
-class PhotoDetailSerializer(PhotoBaseSerializer):
-    class Meta:
-        model = Photo
-        fields = ('name', 'image', 'creation_date', 'album', 'albumname', 'user', 'username')
-        read_only_fields=('creation_date', )
-
-class PhotoSerializer(PhotoBaseSerializer):
-    class Meta:
-        model = Photo
-        fields = ('url', 'name', 'image', 'creation_date', 'album', 'albumname', 'user', 'username')
-        read_only_fields=('url', 'creation_date', 'album', 'albumname', 'user', 'username')
 
 
 class AlbumBaseSerializer(RelatedToUserModelSerializer):
@@ -44,34 +37,29 @@ class AlbumBaseSerializer(RelatedToUserModelSerializer):
 
     def get_totalPhotos(self, obj):
         try:
-            return Photo.objects.get(album_id=obj.pk).count()
+            return Photo.objects.get(album_id=obj.id).count()
         except Photo.DoesNotExist:
             return 0
 
 class AlbumSerializer(AlbumBaseSerializer):
     class Meta:
         model = Album
-        fields = ('url', 'name', 'creation_date', 'totalPhotos', 'user', 'username')
-        read_only_fields=('url', 'creation_date', 'totalPhotos', 'user', 'username')
+        fields = ('id', 'name', 'creation_date', 'totalPhotos', 'user_id', 'username')
+        read_only_fields=('id', 'creation_date', 'totalPhotos', 'user_id', 'username')
 
 class AlbumDetailSerializer(AlbumBaseSerializer):
-    photos = serializers.HyperlinkedRelatedField(view_name='photo-list',  queryset=Photo.objects, many=True, required=False)
+    photos = serializers.PrimaryKeyRelatedField(required=False, queryset=Photo.objects, many=True)
 
     class Meta:
         model = Album
-        fields = ('name', 'creation_date', 'user', 'photos', 'totalPhotos')
-        read_only_fields=('url', 'creation_date', 'totalPhotos', 'user', 'username')
+        fields = ('id', 'name', 'creation_date', 'photos', 'totalPhotos', 'user_id', 'username')
+        read_only_fields=('id', 'creation_date', 'totalPhotos', 'user_id', 'username')
 
 
-class UserDetailSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username',)
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'username',)
+        fields = ('id', 'username',)
 
 
 class RegisterSerializer(JSONWebTokenSerializer):
@@ -117,7 +105,7 @@ class RegisterSerializer(JSONWebTokenSerializer):
         return { 
             'token': jwt_encode_handler(payload),
             'username': user.username,
-            'pk': user.pk
+            'id': user.id
         }
 
 class LoginSerializer(JSONWebTokenSerializer):
@@ -160,7 +148,7 @@ class LoginSerializer(JSONWebTokenSerializer):
                 return {
                     'token': jwt_encode_handler(payload),
                     'username': user.username,
-                    'pk': user.pk
+                    'id': user.id
                 }
             else:
                 raise serializers.ValidationError('Unable to login with provided credentials.')

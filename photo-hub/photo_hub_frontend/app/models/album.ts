@@ -1,22 +1,22 @@
 export class Album {
-    Url: string;
     Title: string;
     DateCreated: Date;
     TotalPhotos: number;
-    UserUrl: string;
+    Id: string;
+    UserId: string;
     Username: string
 
     constructor(title: string,
         dateCreated: Date,
         totalPhotos: number,
-        url='',
-        userUrl='',
+        id='',
+        userId='',
         username='') {
         this.Title = title;
         this.DateCreated = dateCreated;
         this.TotalPhotos = totalPhotos;
-        this.Url = url;
-        this.UserUrl = userUrl;
+        this.Id = id;
+        this.UserId = userId;
         this.Username = username;
     }
 }

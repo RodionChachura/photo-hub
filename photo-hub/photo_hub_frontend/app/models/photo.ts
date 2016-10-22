@@ -2,28 +2,28 @@ export class Photo {
     Title: string;
     Uri: string;
     DateUploaded: Date;
-    AlbumUrl: string;
+    AlbumId: string;
     AlbumTitle: string;
-    Url: string;
-    UserUrl: string;
+    Id: string;
+    UserId: string;
     Username: string;
     
 
     constructor(title: string,
         uri: string,
         dateUploaded: Date,
-        albumUrl: string,
+        albumId: string,
         albumTitle: string,
-        url='',
-        userUrl='',
+        id='',
+        userId='',
         username='') {
         this.Title = title;
         this.Uri = uri;
         this.DateUploaded = dateUploaded;
-        this.AlbumUrl = albumUrl;
+        this.AlbumId = albumId;
         this.AlbumTitle = albumTitle;
-        this.Url = url;
-        this.UserUrl = userUrl;
+        this.Id = id;
+        this.UserId = userId;
         this.Username = username;
     }
 }
