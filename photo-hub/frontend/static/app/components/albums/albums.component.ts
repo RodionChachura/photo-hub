@@ -9,11 +9,13 @@ import { UtilityService } from '../../services/utility.service';
 
 @Component({
     selector: 'albums',
-    templateUrl: './app/components/albums/albums.component.html'
+    templateUrl: 'static/app/components/albums/albums.component.html'
 })
 export class AlbumsComponent implements OnInit {
     private _albums: Array<Album>;
+    private userId: string;
     private username: string
+    private isOwner: boolean;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -24,10 +26,19 @@ export class AlbumsComponent implements OnInit {
 
     ngOnInit() {
         this.route.queryParams.subscribe(params =>{
-            this.username = params['username'] || '';
+            this.userId = params['userId'] || '';
+            this.username = params['username'] || ''
         })
-        if (this.username != '')
-            this.albumsDataService.getAlbumsByUsername(this.username)
+        if (this.userId != '')
+        {
+            this._albums = this.albumsDataService.getUserAlbums(this.userId);
+            this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
+        }
+        else if (this.username != '')
+        {
+            this._albums = this.albumsDataService.getAlbumsByUsername(this.username);
+            this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
+        }
     }
 
     convertDateTime(date: Date) {

@@ -13,11 +13,15 @@ export class ConfigService {
 
     constructor() { }
 
-    public getUserAlbumsUrl(url: string): string{
-        return url + 'albums/'
+    public getCurrentUserId(){
+        if (localStorage.getItem('currentUser'))
+            return JSON.parse(localStorage.getItem('currentUser')).id;
+        return ''
     }
 
-    public getUserPhotosUrl(url: string): string{
-        return url + 'photos/'
+    public getCurrentUserUsername(){
+        if (localStorage.getItem('currentUser'))
+            return JSON.parse(localStorage.getItem('currentUser')).username;
+        return ''
     }
 }

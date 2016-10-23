@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ConfigService } from './services/config.service'
 
 @Component({
   selector: 'photohub',
-  templateUrl: './app/app.component.html'
+  templateUrl: 'static/app/app.component.html'
 })
 export class AppComponent {
-    constructor() {}
+    constructor(private configService : ConfigService,
+        private router: Router) {}
 
     isUserLoggedIn(): boolean{
         if(localStorage.getItem('currentUser'))

@@ -21,21 +21,27 @@ export class AlbumsDataService extends DataService{
             .subscribe(res =>
                 res.forEach(element => {
                     albums.push(new Album(element.name, element.creation_date, element.totalPhotos))
-                })
+                },
+                error =>{
+                    this._utilityService.removeUser();
+                }
+                )
             )
         console.log(albums)
         return albums
     }
 
-    getUserAlbums(userUrl): Array<Album>{
+    getUserAlbums(userId): Array<Album>{
         let albums = new Array<Album>();
-        this.get(this._configService.getUserAlbumsUrl(userUrl))
+        this.get(this._configService.albumsApiUrl + '?user_id=' + userId)
             .subscribe(res =>
                 res.forEach(element => {
                     albums.push(new Album(element.name, element.creation_date, element.totalPhotos))
-                })
+                }),
+                error =>{
+                    this._utilityService.removeUser();
+                }
             )
-        console.log(albums)
         return albums
     }
 
@@ -45,7 +51,10 @@ export class AlbumsDataService extends DataService{
             .subscribe(res =>
                 res.forEach(element => {
                     albums.push(new Album(element.name, element.creation_date, element.totalPhotos, element.url, element.user, element.username))
-                })
+                }),
+                error =>{
+                    this._utilityService.removeUser();
+                }
             )
         return albums
     }
@@ -54,7 +63,10 @@ export class AlbumsDataService extends DataService{
         let album: Album; 
         this.get(url)
             .subscribe(res =>
-                album = new Album(res.name, res.creation_date, res.totalPhotos, res.user, res.username)
+                album = new Album(res.name, res.creation_date, res.totalPhotos, res.user, res.username),
+                error =>{
+                    this._utilityService.removeUser();
+                }
             )
         return album;
     }

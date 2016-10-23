@@ -10,11 +10,13 @@ import { UtilityService } from '../../services/utility.service';
 
 @Component({
     selector: 'photos',
-    templateUrl: './app/components/photos/photos.component.html'
+    templateUrl: 'static/app/components/photos/photos.component.html'
 })
 export class PhotosComponent implements OnInit {
     private _photos: Array<Photo>;
+    private userId: string;
     private username: string
+    private isOwner: boolean;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -24,9 +26,18 @@ export class PhotosComponent implements OnInit {
 
     ngOnInit() {
         this.route.queryParams.subscribe(params =>{
+            this.userId = params['userId'] || '';
             this.username = params['username'] || '';
         })
-        if (this.username != '')
-            this.photosDataService.getPhotosByUsername(this.username)
+        if (this.userId != '')
+        {
+            this._photos = this.photosDataService.getUserPhotos(this.userId);
+            this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
+        }
+        else if (this.username != '')
+        {
+            this._photos = this.photosDataService.getPhotosByUsername(this.username);
+            this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
+        }
     }
 }

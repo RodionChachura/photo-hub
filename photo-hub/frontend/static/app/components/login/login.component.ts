@@ -9,7 +9,7 @@ import { NotificationService } from '../../services/notification.service';
 
 @Component({
     selector: 'login',
-    templateUrl: './app/components/login/login.component.html',
+    templateUrl: 'static/app/components/login/login.component.html',
 })
 export class LoginComponent implements OnInit {
     private _user: Login;

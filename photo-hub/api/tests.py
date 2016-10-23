@@ -60,7 +60,7 @@ class Test(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.content)
         response = self.client.get('/api/albums/', format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-        response = self.client.get('/api/albums/{}/'.format(Album.objects.last().pk), format="json")
+        response = self.client.get('/api/albums/{}/'.format(Album.objects.last().id), format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
         return True
 
@@ -69,20 +69,13 @@ class Test(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.content)
         response = self.client.get('/api/photos/', format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-        response = self.client.get('/api/photos/{}/'.format(Photo.objects.last().pk), format="json")
+        response = self.client.get('/api/photos/{}/'.format(Photo.objects.last().id), format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
         return True
 
     def test_users_urls(self):
         response = self.client.get('/api/users/', format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-        response = self.client.get('/api/users/{}/'.format(User.objects.last().pk), format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-        #nested routers testing
-        self.test_album_urls()
-        self.test_photos_urls()
-        response = self.client.get('/api/users/{}/albums/'.format(User.objects.last().pk), format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
-        response = self.client.get('/api/users/{}/photos/'.format(User.objects.last().pk), format="json")
+        response = self.client.get('/api/users/{}/'.format(User.objects.last().id), format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
         return True

@@ -21,31 +21,27 @@ export class PhotosDataService extends DataService{
             .subscribe(res =>
                 res.forEach(element => {
                     photos.push(new Photo(element.name, element.image, element.creation_date, element.album_id, element.albumname))
-                })
+                }),
+                error =>{
+                    this._utilityService.removeUser();
+                }
             )
         console.log(photos)
         return photos
     }
 
-    getUserPhotos(userUrl): Array<Photo>{
+    getUserPhotos(userId): Array<Photo>{
         let photos = new Array<Photo>();
-        this.get(this._configService.getUserPhotosUrl(userUrl))
+        this.get(this._configService.photosApiUrl + '?user_id=' + userId)
             .subscribe(res =>
                 res.forEach(element => {
                     photos.push(new Photo(element.name, element.image, element.creation_date, element.album_id, element.albumname))
-                })
+                }),
+                error =>{
+                    this._utilityService.removeUser();
+                }
             )
-        return photos
-    }
-
-    getPhotos(userUrl): Array<Photo>{
-        let photos = new Array<Photo>();
-        this.get(this._configService.getUserPhotosUrl(userUrl))
-            .subscribe(res =>
-                res.forEach(element => {
-                    photos.push(new Photo(element.name, element.image, element.creation_date, element.album_id, element.albumname, element.url, element.user_id, element.username_id))
-                })
-            )
+        console.log(photos);
         return photos
     }
 
@@ -53,7 +49,10 @@ export class PhotosDataService extends DataService{
         let photo: Photo;
         this.get(url)
             .subscribe(res =>
-                new Photo(res.name, res.image, res.creation_date, res.album_id, res.albumname, res.url, res.user_id, res.username)
+                new Photo(res.name, res.image, res.creation_date, res.album_id, res.albumname, res.url, res.user_id, res.username),
+                error =>{
+                    this._utilityService.removeUser();
+                }
             )
         return photo
     }

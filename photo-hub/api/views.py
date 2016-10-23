@@ -18,13 +18,13 @@ class RegisterView(JSONWebTokenAPIView):
 
         if serializer.is_valid():
             username = serializer.object.get('username')
-            pk = serializer.object.get('pk')
+            id = serializer.object.get('id')
             token = serializer.object.get('token')
 
             return Response({
                 'token': token,
                 'username': username,
-                'pk': pk
+                'id': id
             })
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -38,13 +38,13 @@ class LoginView(JSONWebTokenAPIView):
 
         if serializer.is_valid():
             username = serializer.object.get('username')
-            pk = serializer.object.get('pk')
+            id = serializer.object.get('id')
             token = serializer.object.get('token')
 
             return Response({
                 'token': token,
                 'username': username,
-                'pk': pk
+                'id': id
             })
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

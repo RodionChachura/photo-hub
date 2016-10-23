@@ -13,12 +13,32 @@ class PhotoViewSet(viewsets.ModelViewSet):
     serializer_class = PhotoSerializer
     permission_classes = (IsOwnerOrReadOnly, permissions.IsAuthenticated)
 
+    def get_queryset(self):
+        queryset = Photo.objects.all()
+        user_id = self.request.query_params.get('user_id', None)
+        if user_id != None:
+            return queryset.filter(user_id=user_id)
+        username = self.request.query_params.get('username', None)
+        if username != None:
+            return queryset.filter(username=username)
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
     permission_classes = (IsOwnerOrReadOnly, permissions.IsAuthenticated)
+
+    def get_queryset(self):
+        queryset = Album.objects.all()
+        user_id = self.request.query_params.get('user_id', None)
+        if user_id != None:
+            return queryset.filter(user_id=user_id)
+        username = self.request.query_params.get('username', None)
+        if username != None:
+            return queryset.filter(username=username)
+        return queryset
 
     def get_serializer_class(self):
         if hasattr(self, 'action') and self.action == 'retrieve':

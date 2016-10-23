@@ -8,7 +8,7 @@ import { NotificationService } from '../../services/notification.service';
 
 @Component({
     selector: 'register',
-    templateUrl: './app/components/register/register.component.html',
+    templateUrl: 'static/app/components/register/register.component.html',
 })
 export class RegisterComponent implements OnInit {
     private _newUser: Registration;
