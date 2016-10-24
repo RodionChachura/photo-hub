@@ -6,8 +6,9 @@ import { Headers, RequestOptions, BaseRequestOptions} from '@angular/http';
 
 import { DataService } from './services/data.service'
 
-import { AlbumsDataService } from './services/albums-data.service'
-import { PhotosDataService } from './services/photos-data.service'
+import { AlbumsService } from './services/albums.service'
+import { PhotosService } from './services/photos.service'
+import { UsersService } from './services/users.service'
 
 
 import { AuthenticationService } from './services/authentication.service'
@@ -22,14 +23,12 @@ import { EqualValidator } from './directives/equal-validator.directive'
 import { AuthGuard } from './guards/auth.guard'
 
 import { AppComponent }  from './app.component';
-import { HomeComponent }  from './components/home.component';
+import { HomeComponent }  from './components/home/home.component';
 import { LoginComponent }  from './components/login/login.component';
 import { RegisterComponent }  from './components/register/register.component';
 import { AlbumsComponent }  from './components/albums/albums.component';
 import { PhotosComponent }  from './components/photos/photos.component';
-
-
-
+import { UsersComponent }  from './components/users/users.component';
 
 
 class AppBaseRequestOptions extends BaseRequestOptions {
@@ -56,6 +55,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         RegisterComponent,
         AlbumsComponent,
         PhotosComponent,
+        UsersComponent,
         EqualValidator
     ],
     providers: [
@@ -64,8 +64,9 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         ConfigService,
         NotificationService,
         DataService,
-        AlbumsDataService,
-        PhotosDataService,
+        AlbumsService,
+        PhotosService,
+        UsersService,
         UtilityService,
         { provide: RequestOptions, useClass: AppBaseRequestOptions }],
     bootstrap: [AppComponent]

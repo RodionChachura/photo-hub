@@ -14,9 +14,8 @@
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <!--<a [routerLink]="['/users']"><i class="fa fa-users fa-fw"></i>&nbsp;Peoples</a>-->
+                    <a [routerLink]="['/users']"><i class="fa fa-users fa-fw"></i>&nbsp;People</a>
                 </li>
-                <li>
                 <li>
                     <a [routerLink]="['/photos']" [queryParams]="{userId: configService.getCurrentUserId(), username: configService.getCurrentUserUsername()}"><i class="fa fa-camera fa-fw"></i>&nbsp;Photos</a>
                 </li>

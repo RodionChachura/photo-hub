@@ -21,6 +21,11 @@ export class UtilityService {
         this._router.navigate([path]);
     }
 
+    pageNotFound(){
+        this._router.navigate(['/']);
+        this.notificationService.printErrorMessage('Page oes not exists')
+    }
+
     removeUser()
     {
         localStorage.removeItem('currentUser');

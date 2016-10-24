@@ -1,11 +1,12 @@
 import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './components/home.component';
+import { HomeComponent } from './components/home/home.component';
 import { LoginComponent }  from './components/login/login.component';
 import { RegisterComponent }  from './components/register/register.component';
 import { AlbumsComponent }  from './components/albums/albums.component';
 import { PhotosComponent }  from './components/photos/photos.component';
+import { UsersComponent }  from './components/users/users.component';
 import { AuthGuard } from './guards/auth.guard'
 
 const appRoutes: Routes = [
@@ -13,7 +14,8 @@ const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'albums', component: AlbumsComponent, canActivate: [AuthGuard] },
-    { path: 'photos', component : PhotosComponent, canActivate: [AuthGuard] }
+    { path: 'photos', component : PhotosComponent, canActivate: [AuthGuard] },
+    { path: 'users', component : UsersComponent, canActivate: [AuthGuard] }
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

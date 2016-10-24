@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Photo } from '../../models/photo';
 
-import { PhotosDataService } from '../../services/photos-data.service';
+import { PhotosService } from '../../services/photos.service';
 import { ConfigService } from '../../services/config.service';
 import { UtilityService } from '../../services/utility.service';
 
@@ -21,7 +21,7 @@ export class PhotosComponent implements OnInit {
     constructor(private route: ActivatedRoute,
         private router: Router,
         private configService: ConfigService,
-        private photosDataService : PhotosDataService,
+        private photosService : PhotosService,
         private utilityService: UtilityService) {}
 
     ngOnInit() {
@@ -31,12 +31,12 @@ export class PhotosComponent implements OnInit {
         })
         if (this.userId != '')
         {
-            this._photos = this.photosDataService.getUserPhotos(this.userId);
+            this._photos = this.photosService.getUserPhotos(this.userId);
             this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
         }
         else if (this.username != '')
         {
-            this._photos = this.photosDataService.getPhotosByUsername(this.username);
+            this._photos = this.photosService.getPhotosByUsername(this.username);
             this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
         }
     }

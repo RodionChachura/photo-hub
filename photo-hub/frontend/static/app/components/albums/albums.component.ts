@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Album } from '../../models/album';
 
-import { AlbumsDataService } from '../../services/albums-data.service';
+import { AlbumsService } from '../../services/albums.service';
 import { ConfigService } from '../../services/config.service';
 import { UtilityService } from '../../services/utility.service';
 
@@ -20,7 +20,7 @@ export class AlbumsComponent implements OnInit {
     constructor(private route: ActivatedRoute,
         private router: Router,
         private configService: ConfigService,
-        private albumsDataService : AlbumsDataService,
+        private albumsService : AlbumsService,
         private utilityService: UtilityService) {}
 
 
@@ -31,12 +31,12 @@ export class AlbumsComponent implements OnInit {
         })
         if (this.userId != '')
         {
-            this._albums = this.albumsDataService.getUserAlbums(this.userId);
+            this._albums = this.albumsService.getUserAlbums(this.userId);
             this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
         }
         else if (this.username != '')
         {
-            this._albums = this.albumsDataService.getAlbumsByUsername(this.username);
+            this._albums = this.albumsService.getAlbumsByUsername(this.username);
             this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
         }
     }

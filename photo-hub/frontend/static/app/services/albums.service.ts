@@ -7,7 +7,7 @@ import { DataService } from './data.service'
 import { Album } from '../models/album'
  
 @Injectable()
-export class AlbumsDataService extends DataService{
+export class AlbumsService extends DataService{
     constructor(private _http: Http,
         private _utilityService: UtilityService,
         private _notificationService: NotificationService,
@@ -23,7 +23,10 @@ export class AlbumsDataService extends DataService{
                     albums.push(new Album(element.name, element.creation_date, element.totalPhotos))
                 },
                 error =>{
-                    this._utilityService.removeUser();
+                    if(error.status == 403)
+                        this._utilityService.removeUser();
+                    else
+                        this._utilityService.pageNotFound();
                 }
                 )
             )
@@ -39,7 +42,10 @@ export class AlbumsDataService extends DataService{
                     albums.push(new Album(element.name, element.creation_date, element.totalPhotos))
                 }),
                 error =>{
-                    this._utilityService.removeUser();
+                    if(error.status == 403)
+                        this._utilityService.removeUser();
+                    else
+                        this._utilityService.pageNotFound();
                 }
             )
         return albums
@@ -53,7 +59,10 @@ export class AlbumsDataService extends DataService{
                     albums.push(new Album(element.name, element.creation_date, element.totalPhotos, element.url, element.user, element.username))
                 }),
                 error =>{
-                    this._utilityService.removeUser();
+                    if(error.status == 403)
+                        this._utilityService.removeUser();
+                    else
+                        this._utilityService.pageNotFound();
                 }
             )
         return albums
@@ -65,7 +74,10 @@ export class AlbumsDataService extends DataService{
             .subscribe(res =>
                 album = new Album(res.name, res.creation_date, res.totalPhotos, res.user, res.username),
                 error =>{
-                    this._utilityService.removeUser();
+                    if(error.status == 403)
+                        this._utilityService.removeUser();
+                    else
+                        this._utilityService.pageNotFound();
                 }
             )
         return album;

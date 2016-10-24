@@ -7,7 +7,7 @@ import { DataService } from './data.service'
 import { Photo } from '../models/photo'
  
 @Injectable()
-export class PhotosDataService extends DataService{
+export class PhotosService extends DataService{
     constructor(private _http: Http,
         private _utilityService: UtilityService,
         private _notificationService: NotificationService,
@@ -23,7 +23,10 @@ export class PhotosDataService extends DataService{
                     photos.push(new Photo(element.name, element.image, element.creation_date, element.album_id, element.albumname))
                 }),
                 error =>{
-                    this._utilityService.removeUser();
+                    if(error.status == 403)
+                        this._utilityService.removeUser();
+                    else
+                        this._utilityService.pageNotFound();
                 }
             )
         console.log(photos)
@@ -38,7 +41,10 @@ export class PhotosDataService extends DataService{
                     photos.push(new Photo(element.name, element.image, element.creation_date, element.album_id, element.albumname))
                 }),
                 error =>{
-                    this._utilityService.removeUser();
+                    if(error.status == 403)
+                        this._utilityService.removeUser();
+                    else
+                        this._utilityService.pageNotFound();
                 }
             )
         console.log(photos);
@@ -51,7 +57,10 @@ export class PhotosDataService extends DataService{
             .subscribe(res =>
                 new Photo(res.name, res.image, res.creation_date, res.album_id, res.albumname, res.url, res.user_id, res.username),
                 error =>{
-                    this._utilityService.removeUser();
+                    if(error.status == 403)
+                        this._utilityService.removeUser();
+                    else
+                        this._utilityService.pageNotFound();
                 }
             )
         return photo
