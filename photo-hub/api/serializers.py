@@ -42,10 +42,18 @@ class AlbumBaseSerializer(RelatedToUserModelSerializer):
             return 0
 
 class AlbumSerializer(AlbumBaseSerializer):
+    thumbnail = serializers.SerializerMethodField(required=False)
+
+    def get_thumbnail(self, obj):
+        photo = Photo.objects.filter(album_id=obj.id).first()
+        if photo != None:
+            return photo.image
+        return None
+
     class Meta:
         model = Album
-        fields = ('id', 'name', 'creation_date', 'totalPhotos', 'user_id', 'username')
-        read_only_fields=('id', 'creation_date', 'totalPhotos', 'user_id', 'username')
+        fields = ('id', 'name', 'creation_date', 'totalPhotos', 'user_id', 'username', 'thumbnail')
+        read_only_fields=('id', 'creation_date', 'totalPhotos', 'user_id', 'username', 'thumbnail')
 
 class AlbumDetailSerializer(AlbumBaseSerializer):
     photos = serializers.PrimaryKeyRelatedField(required=False, queryset=Photo.objects, many=True)
@@ -57,9 +65,18 @@ class AlbumDetailSerializer(AlbumBaseSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    totalAlbums = serializers.SerializerMethodField(required=False)
+    totalPhotos = serializers.SerializerMethodField(required=False)
+    
+    def get_totalAlbums(self, obj):
+        return Album.objects.filter(user_id=obj.id).count()
+
+    def get_totalPhotos(self, obj):
+        return Photo.objects.filter(user_id=obj.id).count()
+
     class Meta:
         model = User
-        fields = ('id', 'username',)
+        fields = ('id', 'username', 'totalAlbums', 'totalPhotos')
 
 
 class RegisterSerializer(JSONWebTokenSerializer):

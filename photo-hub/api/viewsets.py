@@ -17,10 +17,10 @@ class PhotoViewSet(viewsets.ModelViewSet):
         queryset = Photo.objects.all()
         user_id = self.request.query_params.get('user_id', None)
         if user_id != None:
-            return queryset.filter(user_id=user_id)
-        username = self.request.query_params.get('username', None)
-        if username != None:
-            return queryset.filter(username=username)
+            queryset = queryset.filter(user_id=user_id)
+        album_id = self.request.query_params.get('album_id', None)
+        if album_id != None:
+            queryset = queryset.filter(album_id=album_id)
         return queryset
 
     def perform_create(self, serializer):
@@ -34,10 +34,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
         queryset = Album.objects.all()
         user_id = self.request.query_params.get('user_id', None)
         if user_id != None:
-            return queryset.filter(user_id=user_id)
-        username = self.request.query_params.get('username', None)
-        if username != None:
-            return queryset.filter(username=username)
+            queryset = queryset.filter(user_id=user_id)
         return queryset
 
     def get_serializer_class(self):

@@ -27,6 +27,8 @@ import { HomeComponent }  from './components/home/home.component';
 import { LoginComponent }  from './components/login/login.component';
 import { RegisterComponent }  from './components/register/register.component';
 import { AlbumsComponent }  from './components/albums/albums.component';
+import { AlbumDetailComponent }  from './components/albums/album-detail.component';
+import { AddAlbumComponent }  from './components/albums/add-album.component';
 import { PhotosComponent }  from './components/photos/photos.component';
 import { UsersComponent }  from './components/users/users.component';
 
@@ -54,6 +56,8 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         LoginComponent,
         RegisterComponent,
         AlbumsComponent,
+        AddAlbumComponent,
+        AlbumDetailComponent,
         PhotosComponent,
         UsersComponent,
         EqualValidator

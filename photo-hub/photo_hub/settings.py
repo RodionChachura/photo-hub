@@ -18,6 +18,17 @@ import datetime
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+FRONTEND_ROOT = os.path.join(BASE_DIR, 'frontend')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded_media')
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    FRONTEND_ROOT,
+]
+
+MEDIA_URL = '/media/'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -71,8 +82,7 @@ ROOT_URLCONF = 'photo_hub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'frontend', 'templates'),
-                 os.path.join(BASE_DIR, 'frontend', 'static')],
+        'DIRS': [FRONTEND_ROOT],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,24 +150,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend', 'static'),
-]
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded_media')
-MEDIA_URL = '/media/'
-
-NOSE_ARGS = ['--nocapture',
-             '-s',
-             '--nologcapture',]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-        #'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',

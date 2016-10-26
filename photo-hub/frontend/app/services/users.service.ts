@@ -20,7 +20,7 @@ export class UsersService extends DataService{
         this.get(this._configService.usersApiUrl)
             .subscribe(res =>
                 res.forEach(element => {
-                    users.push(new User(element.id, element.username))
+                    users.push(new User(element.id, element.username, element.totalPhotos, element.totalAlbums))
                 },
                 error =>{
                     if(error.status == 403)
@@ -30,6 +30,7 @@ export class UsersService extends DataService{
                 }
                 )
             )
+        console.log(users);
         return users;
     }
 

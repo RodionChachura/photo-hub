@@ -23,7 +23,7 @@ export class UtilityService {
 
     pageNotFound(){
         this._router.navigate(['/']);
-        this.notificationService.printErrorMessage('Page oes not exists')
+        this.notificationService.printErrorMessage('Page does not exists')
     }
 
     removeUser()

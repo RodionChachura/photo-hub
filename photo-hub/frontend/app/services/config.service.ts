@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { User } from '../models/user'
+import { Album } from '../models/album'
+
 
 @Injectable()
 export class ConfigService {
@@ -10,6 +13,8 @@ export class ConfigService {
     public albumsApiUrl: string = this.apiUrl + 'albums/';
     public photosApiUrl: string = this.apiUrl + 'photos/';
 
+    public selectedUser: User;
+    public selectedAlbum: Album;
 
     constructor() { }
 

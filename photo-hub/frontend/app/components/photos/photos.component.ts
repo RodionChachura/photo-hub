@@ -26,18 +26,17 @@ export class PhotosComponent implements OnInit {
 
     ngOnInit() {
         this.route.queryParams.subscribe(params =>{
-            this.userId = params['userId'] || '';
-            this.username = params['username'] || '';
+            this.userId = params['userId'] || null;
         })
-        if (this.userId != '')
+        if (this.userId != null)
         {
             this._photos = this.photosService.getUserPhotos(this.userId);
-            this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
-        }
-        else if (this.username != '')
-        {
-            this._photos = this.photosService.getPhotosByUsername(this.username);
-            this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
+            if (this.userId == this.configService.getCurrentUserId()){
+                this.username = this.configService.getCurrentUserUsername()
+                this.isOwner = true;
+            }
+            else 
+                this.username = this.configService.selectedUser.Username;
         }
     }
 }

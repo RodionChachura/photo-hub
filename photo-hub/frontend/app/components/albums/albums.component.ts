@@ -13,7 +13,7 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class AlbumsComponent implements OnInit {
     private _albums: Array<Album>;
-    private userId: string;
+    private userId: number;
     private username: string
     private isOwner: boolean;
 
@@ -26,19 +26,22 @@ export class AlbumsComponent implements OnInit {
 
     ngOnInit() {
         this.route.queryParams.subscribe(params =>{
-            this.userId = params['userId'] || '';
-            this.username = params['username'] || ''
+            this.userId = params['userId'] || null;
         })
-        if (this.userId != '')
+        if (this.userId != null)
         {
             this._albums = this.albumsService.getUserAlbums(this.userId);
-            this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
+            if (this.userId == this.configService.getCurrentUserId()){
+                this.username = this.configService.getCurrentUserUsername()
+                this.isOwner = true;
+            }
+            else 
+                this.username = this.configService.selectedUser.Username;
         }
-        else if (this.username != '')
-        {
-            this._albums = this.albumsService.getAlbumsByUsername(this.username);
-            this.isOwner = (this.configService.getCurrentUserId() == this.userId)? true: false;
-        }
+    }
+
+    saveSelected(album: Album){
+        this.configService.selectedAlbum = album;
     }
 
     convertDateTime(date: Date) {
