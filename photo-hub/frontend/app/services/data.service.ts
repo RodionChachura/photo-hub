@@ -5,6 +5,7 @@ import { NotificationService } from './notification.service'
 
 import { IUser } from '../models/user'
 import { IAlbum } from '../models/album'
+import { IAlbumDetail } from '../models/album-detail'
 import { IPhoto } from '../models/photo'
 
 import { Observable } from 'rxjs/Observable';
@@ -14,8 +15,6 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class DataService {
     public apiUri = 'http://localhost:8000/api/';
-    public selectedUser: IUser;
-    public selectedAlbum: IAlbum;
 
     constructor(private http: Http,
         private utilityService: UtilityService,
@@ -37,79 +36,69 @@ export class DataService {
     getUsers(): Observable<IUser[]>{
         return this.http.get(this.apiUri + 'users/', this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
-            //.catch(this.handleError);
+            .catch(this.handleError);
     }
 
     createAlbum(title: string): Observable<IAlbum>{
         let json = JSON.stringify({ title: title});
-        console.log(json)
         return this.http.post(this.apiUri + 'albums/', json, this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
-        //.catch(this.handleError);
+        .catch(this.handleError);
     }
 
     deleteAlbum(id: number): Observable<void> {
-        return this.http.delete(this.apiUri + 'albums/' + id)
+        return this.http.delete(this.apiUri + 'albums/' + id + '/', this.headers())
             .map((res: Response) => {
-                console.log('responce');
                 return;
             })
-            .catch(this.handleError);
+            .catch(this.handleError);  
     }
 
     getUserAlbums(userId): Observable<IAlbum[]>{
         return this.http.get(this.apiUri + 'albums/' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
-            //.catch(this.handleError);
+            .catch(this.handleError);
     }
 
     getAlbumPhotos(albumId): Observable<IPhoto[]>{
         return this.http.get(this.apiUri + 'photos/' + '?album_id=' + albumId, this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
-            //.catch(this.handleError);
+            .catch(this.handleError);
     }
 
-    getAlbum(id): Observable<IAlbum>{
+    getAlbum(id): Observable<IAlbumDetail>{
         return this.http.get(this.apiUri + 'albums/' + id + '/', this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
-            //.catch(this.handleError);
+            .catch(this.handleError);
     }
 
     getUserPhotos(userId): Observable<IPhoto[]>{
         return this.http.get(this.apiUri + 'photos/' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
-            //.catch(this.handleError);
+            .catch(this.handleError);
     }
 
     getPhoto(id): Observable<IPhoto>{
        return this.http.get(this.apiUri + 'photos/' + id + '/', this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
-            //.catch(this.handleError);
+            .catch(this.handleError);
     }
 
     private handleError(error: any) {
-        console.log(error);
         var applicationError = error.headers.get('Application-Error');
         var serverError = error.json();
         var modelStateErrors: string = '';

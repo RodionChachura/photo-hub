@@ -2,13 +2,13 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                {{albumTitle}}
+                {{albumDetail.username}} {{albumDetail.title}}
             </h1>
         </div>
     </div>
 
     <div class="row text-center">
-        <div class="col-md-3 col-sm-6 hero-feature" *ngFor="let photo of photos">
+        <div class="col-md-3 col-sm-6 hero-feature" *ngFor="let photo of albumDetail.photos">
             <div class="thumbnail blue-thumb">
                 <a class="fancybox center-block" rel="gallery" href="{{photo.image}}" title="{{photo.title}}">
                     <img class="media-object center-block" height="120" src="{{photo.image}}" alt="" />

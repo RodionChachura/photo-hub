@@ -22,16 +22,13 @@ export class RegisterComponent implements OnInit {
     }
 
     register(): void {
-        console.log("Register clicked!")
         this.authenticationService.register(this._newUser.Username, this._newUser.Email, this._newUser.Password)
             .subscribe(data => {
-                console.log("Registration result:" + data);
                 this.notificationService.printSuccessMessage('Dear ' + this._newUser.Username + ', your account created, Enjoy!');
                 this.router.navigate(['/']);
             },
             error =>
             { 
-                console.error('Error: ' + error);
                 this.notificationService.printErrorMessage(error);
             });
     };

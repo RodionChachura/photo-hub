@@ -14,8 +14,7 @@ import { NotificationService } from '../../services/notification.service';
 })
 export class PhotosComponent implements OnInit {
     private photos: IPhoto[];
-    private userId: string;
-    private username: string
+    private username: string;
     private isOwner: boolean;
 
     constructor(private route: ActivatedRoute,
@@ -25,24 +24,29 @@ export class PhotosComponent implements OnInit {
         private notificationService: NotificationService) {}
 
     ngOnInit() {
+        var userId: number;
         this.route.queryParams.subscribe(params =>{
-            this.userId = params['user_id'] || null;
+            userId = params['user_id'] || null;
         })
-        if (this.userId != null)
-        {
-            this.dataService.getUserPhotos(this.userId)
-                .subscribe((photos: IPhoto[]) => {
-                    this.photos = photos;
-                },
-                error => {
-                    this.notificationService.printErrorMessage('Failed to load photos. ' + error);
-                });
-            if (this.userId == this.dataService.getCurrentUserId()){
-                this.username = this.dataService.getCurrentUserUsername()
-                this.isOwner = true;
+        this.dataService.getUserPhotos(userId)
+            .subscribe((photos: IPhoto[]) => {
+                this.photos = photos;
+            },
+            error => {
+                this.notificationService.printErrorMessage('Failed to load photos. ' + error);
+            });
+        if (userId == this.dataService.getCurrentUserId()){
+            this.isOwner = true;
+            this.username = this.dataService.getCurrentUserUsername()
+        }
+        else{
+            if(this.photos.length > 0){
+                this.username = this.photos[0].username;
             }
-            else 
-                this.username = this.dataService.selectedUser.username;
+            else{
+                this.router.navigate(['/users']);
+                this.notificationService.printErrorMessage("this user doesn't have any photo. How you appear here?")
+            }
         }
     }
 }

@@ -35,8 +35,4 @@ export class UsersComponent implements OnInit {
     convertDateTime(date: Date) {
         return this.utilityService.convertDateTime(date);
     }
-
-    saveSelected(user: IUser) {
-        this.dataService.selectedUser = user;
-    }
 }

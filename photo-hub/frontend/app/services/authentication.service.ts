@@ -12,7 +12,6 @@ export class AuthenticationService {
             var json = JSON.stringify({ email: usernameOrPassword, password: password })
         else
             var json = JSON.stringify({ username: usernameOrPassword, password: password })
-        console.log(json);
         return this.http.post('api/login/', json)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response

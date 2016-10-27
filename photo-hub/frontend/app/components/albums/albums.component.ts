@@ -25,6 +25,7 @@ export class AlbumsComponent implements OnInit {
 
 
     ngOnInit() {
+        var userId: number;
         this.route.queryParams.subscribe(params =>{
             this.userId = params['user_id'] || null;
         })
@@ -41,21 +42,27 @@ export class AlbumsComponent implements OnInit {
                 this.username = this.dataService.getCurrentUserUsername()
                 this.isOwner = true;
             }
-            else 
-                this.username = this.dataService.selectedUser.username;
+            else{
+                this.router.navigate(['/users']);
+                this.notificationService.printErrorMessage("this user doesn't have any albums. How you appear here?")
+            }
         }
-    }
-
-    saveSelected(album: IAlbum){
-        this.dataService.selectedAlbum = album;
+        else{
+                this.router.navigate(['/']);
+                this.notificationService.printErrorMessage("No way!")
+            }
     }
 
     deleteAlbum(album: IAlbum){
-        var index = this.albums.indexOf(album, 0);
-        if (index > -1) {
-            this.albums.splice(index, 1);
-        }
-        this.dataService.deleteAlbum(album.id);
+        this.dataService.deleteAlbum(album.id).subscribe((res) => {
+                var index = this.albums.indexOf(album, 0);
+                if (index > -1) {
+                    this.albums.splice(index, 1);
+                }
+            },
+            error => {
+                this.notificationService.printErrorMessage('Failed to delete ' + album.title + ' ' + error);
+            });
     }
 
     convertDateTime(date: Date) {

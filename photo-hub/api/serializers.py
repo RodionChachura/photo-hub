@@ -80,7 +80,7 @@ class AlbumSerializer(AlbumBaseSerializer):
         read_only_fields=('id', 'creationDate', 'totalPhotos', 'userId', 'username', 'thumbnail')
 
 class AlbumDetailSerializer(AlbumBaseSerializer):
-    photos = serializers.PrimaryKeyRelatedField(required=False, queryset=Photo.objects, many=True)
+    photos = PhotoSerializer(required=False, many=True)
 
     class Meta:
         model = Album

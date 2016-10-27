@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute }  from '@angular/router';
 import { IPhoto } from '../../models/photo';
+import { IAlbumDetail } from '../../models/album-detail';
 
 import { DataService } from '../../services/data.service';
 import { UtilityService } from '../../services/utility.service';
@@ -12,10 +13,7 @@ import { NotificationService } from '../../services/notification.service';
     templateUrl: 'static/app/components/albums/album-detail.component.html'
 })
 export class AlbumDetailComponent implements OnInit {
-    private albumId: number;
-    private albumTitle: string;
-    private photos: IPhoto[];
-    private username: string;
+    private albumDetail: IAlbumDetail;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -24,13 +22,12 @@ export class AlbumDetailComponent implements OnInit {
         private notificationService: NotificationService) {}
 
     ngOnInit() {
+        var albumId: number;
         this.route.params.subscribe(params =>{
-            this.albumId = params['id'];
+            albumId = params['id'];
         })
-        console.log(this.dataService.selectedAlbum);
-        this.albumTitle = this.dataService.selectedAlbum.title;
-        this.dataService.getAlbumPhotos(this.albumId).subscribe((photos: IPhoto[]) => {
-                this.photos = photos;
+        this.dataService.getAlbum(albumId).subscribe((albumDetail: IAlbumDetail) => {
+                this.albumDetail = albumDetail;
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load album: ' + error);
