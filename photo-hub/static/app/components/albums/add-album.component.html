@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" [routerLink]="['/albums']" [queryParams]="{user_id: dataService.getCurrentUserId()}" aria-hidden="true">×</button>
+                <button type="button" class="close" data-dismiss="modal" [routerLink]="['/albums']" aria-hidden="true">×</button>
                 <h1 class="text-center">
                     <span class="fa-stack fa-1x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control input-lg" placeholder="Album name" [(ngModel)]="_title"
                             required minlength="2" maxlength="20"
-                            name="title" id="title" ngControl="title" #title="ngModel" />
+                            name="title" ngControl="title" #title="ngModel" />
                         <div [hidden]="title.valid || title.untouched" class="alert alert-danger">
                             <span *ngIf="title.errors && title.errors.required">
                                 Title is required
@@ -29,8 +29,6 @@
                         <button class="btn btn-primary btn-lg btn-block" (click)="create()" [disabled]="!albumForm.form.valid">Create</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
             </div>
         </div>
     </div>

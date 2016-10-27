@@ -27,12 +27,12 @@ class Test(TestCase):
             "password": "TestUserPassword"
         }
     testAlbum = {
-            "name" : "Test Album"
+            "title" : "Test Album"
         }
     
     def get_testPhoto(self):
         return {
-            "name" : "Test Photo",
+            "title" : "Test Photo",
             "image" : open(os.path.join(settings.BASE_DIR, 'test_image_folder/test_image.jpg'), 'rb')
         }
 

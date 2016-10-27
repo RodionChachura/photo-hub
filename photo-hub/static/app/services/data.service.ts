@@ -54,15 +54,6 @@ export class DataService {
         //.catch(this.handleError);
     }
 
-    deleteAlbum(id: number): Observable<void> {
-        return this.http.delete(this.apiUri + 'albums/' + id)
-            .map((res: Response) => {
-                console.log('responce');
-                return;
-            })
-            .catch(this.handleError);
-    }
-
     getUserAlbums(userId): Observable<IAlbum[]>{
         return this.http.get(this.apiUri + 'albums/' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {

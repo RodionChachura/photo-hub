@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router'; 
 
-import { IPhoto } from '../../models/photo';
+import { IAlbum } from '../../models/album';
 
 import { DataService } from '../../services/data.service';
 import { UtilityService } from '../../services/utility.service';
 import { NotificationService } from '../../services/notification.service';
 
-
 @Component({
-    selector: 'photos',
-    templateUrl: 'static/app/components/photos/photos.component.html'
+    selector: 'albums',
+    templateUrl: 'static/app/components/albums/albums.component.html'
 })
-export class PhotosComponent implements OnInit {
-    private photos: IPhoto[];
-    private userId: string;
+export class AlbumsComponent implements OnInit {
+    private albums: IAlbum[];
+    private userId: number;
     private username: string
     private isOwner: boolean;
 
@@ -24,18 +23,19 @@ export class PhotosComponent implements OnInit {
         private utilityService: UtilityService,
         private notificationService: NotificationService) {}
 
+
     ngOnInit() {
         this.route.queryParams.subscribe(params =>{
             this.userId = params['user_id'] || null;
         })
         if (this.userId != null)
         {
-            this.dataService.getUserPhotos(this.userId)
-                .subscribe((photos: IPhoto[]) => {
-                    this.photos = photos;
+            this.dataService.getUserAlbums(this.userId)
+                .subscribe((albums: IAlbum[]) => {
+                    this.albums = albums;
                 },
                 error => {
-                    this.notificationService.printErrorMessage('Failed to load photos. ' + error);
+                    this.notificationService.printErrorMessage('Failed to load albums. ' + error);
                 });
             if (this.userId == this.dataService.getCurrentUserId()){
                 this.username = this.dataService.getCurrentUserUsername()
@@ -44,5 +44,13 @@ export class PhotosComponent implements OnInit {
             else 
                 this.username = this.dataService.selectedUser.username;
         }
+    }
+
+    saveSelected(album: IAlbum){
+        this.dataService.selectedAlbum = album;
+    }
+
+    convertDateTime(date: Date) {
+        return this.utilityService.convertDateTime(date);
     }
 }

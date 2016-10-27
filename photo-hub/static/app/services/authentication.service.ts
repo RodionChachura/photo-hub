@@ -13,7 +13,7 @@ export class AuthenticationService {
         else
             var json = JSON.stringify({ username: usernameOrPassword, password: password })
         console.log(json);
-        return this.http.post('api/login/', json)
+        return this.http.post('http://localhost:8000/api/login/', json)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
@@ -25,7 +25,7 @@ export class AuthenticationService {
     }
 
     register(username: string, email: string, password: string){
-        return this.http.post('api/register/', JSON.stringify({ username: username, email: email, password: password }))
+        return this.http.post('api/register', JSON.stringify({ username: username, email: email, password: password }))
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
