@@ -60,9 +60,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'livereload',
     'corsheaders',
     'api',
-    'frontend'
+    'frontend',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -75,7 +76,11 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # watching for static files changes
+    'livereload.middleware.LiveReloadScript',
 ]
+
+
 
 ROOT_URLCONF = 'photo_hub.urls'
 

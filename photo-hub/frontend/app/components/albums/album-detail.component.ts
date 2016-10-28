@@ -14,6 +14,8 @@ import { NotificationService } from '../../services/notification.service';
 })
 export class AlbumDetailComponent implements OnInit {
     private albumDetail: IAlbumDetail;
+    private albumId: number;
+    private isOwner: boolean;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -22,12 +24,15 @@ export class AlbumDetailComponent implements OnInit {
         private notificationService: NotificationService) {}
 
     ngOnInit() {
-        var albumId: number;
         this.route.params.subscribe(params =>{
-            albumId = params['id'];
+            this.albumId = params['id'];
+            console.log(this.albumId);
         })
-        this.dataService.getAlbum(albumId).subscribe((albumDetail: IAlbumDetail) => {
+        this.dataService.getAlbum(this.albumId).subscribe((albumDetail: IAlbumDetail) => {
                 this.albumDetail = albumDetail;
+                this.isOwner = albumDetail.userId == this.dataService.getCurrentUserId();
+                console.log(albumDetail)
+                console.log(this.isOwner);
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load album: ' + error);

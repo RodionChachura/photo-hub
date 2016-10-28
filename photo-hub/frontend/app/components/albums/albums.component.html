@@ -17,13 +17,13 @@
             <p>{{convertDateTime(album.creationDate)}}</p>
         </div>
         <div class="col-md-5">
-            <a class="fancybox" rel="gallery" href="{{album.thumbnail}}" title="{{album.title}}">
+            <a *ngIf="album.totalPhotos > 0" class="fancybox" rel="gallery" href="{{album.thumbnail}}" title="{{album.title}}">
                 <img class="media-object img-responsive album-thumbnail" src="{{album.thumbnail}}" alt="" />
             </a>
         </div>
         <div class="col-md-6">
             <h3>
-                <a (click)="saveSelected(album)" [routerLink]="['/albums/:id', {id: album.id}]">{{album.title}}</a>
+                <a [routerLink]="['/albums/:id', {id: album.id}]">{{album.title}}</a>
                 <button *ngIf="isOwner" type="button" class="btn btn-danger" (click)="deleteAlbum(album)"><i class="fa fa-trash-o"></i></button>
             </h3>
             <p>

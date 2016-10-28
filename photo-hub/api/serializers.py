@@ -40,7 +40,7 @@ class PhotoSerializer(RelatedToUserModelSerializer):
     class Meta:
         model = Photo
         fields = ('id', 'title', 'image', 'creationDate', 'albumId', 'albumTitle', 'userId', 'username')
-        read_only_fields=('id', 'creationDate', 'albumId', 'albumTitle', 'userId', 'username')
+        read_only_fields=('id', 'creationDate', 'albumTitle', 'userId', 'username')
 
     def get_albumId(self, obj):
         return obj.album_id

@@ -98,6 +98,19 @@ export class DataService {
             .catch(this.handleError);
     }
 
+    uploadPhotoToAlbum(image: any, name: string, albumId: number): Observable<void>{
+        let input = new FormData();
+        input.append("image", image);
+        input.append("title", name);
+        input.append("albumId", albumId);
+        console.log(input);
+        return this.http.post(this.apiUri + 'photos/', input, this.headers(true))
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(this.handleError);
+    }
+
     private handleError(error: any) {
         var applicationError = error.headers.get('Application-Error');
         var serverError = error.json();
@@ -116,12 +129,15 @@ export class DataService {
         return Observable.throw(applicationError || modelStateErrors || 'Server error');
     }
  
-    private headers() {
+    private headers(formdata=false) {
         // create authorization header with jwt token
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser && currentUser.token) {
-            let headers = new Headers({ 'Authorization': 'JWT ' + currentUser.token, 'Content-Type': 'application/json'});
-            return new RequestOptions({ headers: headers });
+            if (formdata)
+                var headers = new Headers({ 'Authorization': 'JWT ' + currentUser.token});
+            else
+                var headers = new Headers({ 'Authorization': 'JWT ' + currentUser.token, 'Content-Type': 'application/json'});
+            return new RequestOptions({ headers: headers }); 
         }
     }
 }
