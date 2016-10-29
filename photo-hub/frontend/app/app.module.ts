@@ -13,6 +13,7 @@ import { UtilityService } from './services/utility.service'
 import { routing } from './app.routes';
 
 import { EqualValidator } from './directives/equal-validator.directive'
+import { AttachmentValidator } from './directives/attachment-validator.directive'
 
 import { AuthGuard } from './guards/auth.guard'
 
@@ -56,7 +57,8 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         AlbumDetailComponent,
         PhotosComponent,
         UsersComponent,
-        EqualValidator
+        EqualValidator,
+        AttachmentValidator
     ],
     providers: [
         AuthGuard,

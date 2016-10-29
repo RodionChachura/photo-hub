@@ -3,6 +3,7 @@ from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.parsers import MultiPartParser, FormParser
+from djangorestframework_camel_case.parser import CamelCaseJSONParser
 from django.contrib.auth.models import User
 
 from api.permissions import IsOwnerOrReadOnly
@@ -11,9 +12,9 @@ from api.serializers import PhotoSerializer, AlbumSerializer, AlbumDetailSeriali
 
 
 class PhotoViewSet(viewsets.ModelViewSet):
-    #parser_classes = (FormParser, MultiPartParser,)
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
+    parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsOwnerOrReadOnly, permissions.IsAuthenticated)
 
     def get_queryset(self):
@@ -27,16 +28,11 @@ class PhotoViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    @detail_route(methods=['post'])
-    #def upload_photo(self, request, format=None):
-    #    serializer = PhotoSerializer(data=request.data)
-    #    if serializer.is_valid():
-    #        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    def pre_save(self, obj):
-        obj.image = self.request.FILES.get('image')
+        # bad code
+        if 'albumId' in self.request.data:
+            serializer.save(user=self.request.user, album_id = self.request.data['albumId'])
+        else:
+            serializer.save(user=self.request.user)
 
 class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()

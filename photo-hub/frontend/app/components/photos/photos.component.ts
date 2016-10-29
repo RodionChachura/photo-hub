@@ -49,4 +49,20 @@ export class PhotosComponent implements OnInit {
             }
         }
     }
+
+    delete(photo){
+        this.dataService.deletePhoto(photo.id).subscribe((res) => {
+                var index = this.photos.indexOf(photo, 0);
+                if (index > -1) {
+                    this.photos.splice(index, 1);
+                }
+            },
+            error => {
+                this.notificationService.printErrorMessage('Failed to delete ' + photo.title + ' ' + error);
+            });
+    }
+
+    convertDateTime(date: Date) {
+        return this.utilityService.convertDateTime(date);
+    }
 }

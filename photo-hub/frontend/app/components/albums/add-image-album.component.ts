@@ -12,8 +12,10 @@ import { IAlbum } from '../../models/album';
 })
 export class AddImageAlbumComponent implements OnInit {
     private _title: string;
+    private _photo: any;
+    private attachment: boolean;
     private albumId: number;
-    @ViewChild("fileInput") fileInput;
+    @ViewChild("photo") photo;
 
     constructor(private route: ActivatedRoute,
         public router: Router,
@@ -26,14 +28,24 @@ export class AddImageAlbumComponent implements OnInit {
         })
     }
 
+    uploadChanged(): void {
+        let fi = this.photo.nativeElement;
+        this.attachment = (fi.files && fi.files[0])? true : false; 
+    }
+
     upload(): void {
-        let fi = this.fileInput.nativeElement;
+        let fi = this.photo.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            this.dataService.uploadPhotoToAlbum(fileToUpload, "testImage", this.albumId)
+            
+            this.dataService.uploadPhotoToAlbum(fileToUpload, this._title, this.albumId)
                 .subscribe(res => {
-                    console.log(res);
-                });
-    }
+                    this.router.navigate(['/albums', this.albumId]);
+                    this.notificationService.printSuccessMessage(this._title + ' uploaded!');
+                },
+                error => {
+                this.notificationService.printErrorMessage('Failed to load image ' + error);
+            });
+        }
     }
 }

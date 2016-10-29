@@ -43,14 +43,13 @@ export class AlbumsComponent implements OnInit {
                 this.isOwner = true;
             }
             else{
+                if(this.albums.length > 0){
+                    this.username = this.albums[0].username;
+                }
                 this.router.navigate(['/users']);
                 this.notificationService.printErrorMessage("this user doesn't have any albums. How you appear here?")
             }
         }
-        else{
-                this.router.navigate(['/']);
-                this.notificationService.printErrorMessage("No way!")
-            }
     }
 
     deleteAlbum(album: IAlbum){

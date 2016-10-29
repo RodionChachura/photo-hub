@@ -30,7 +30,7 @@
                 Photos: <span class="badge">{{album.totalPhotos}}</span>
             </p>
             <!--<p>{{album.Description}}</p>-->
-            <a *ngIf="album.totalPhotos > 0" class="btn btn-primary" (click)="saveSelected(album)" [routerLink]="['/albums/:id', {id: album.id}]">View photos <i class="fa fa-angle-right"></i></a>
+            <a *ngIf="album.totalPhotos > 0" class="btn btn-primary" [routerLink]="['/albums/:id', {id: album.id}]">View photos <i class="fa fa-angle-right"></i></a>
         </div>
         <hr/>
     </div>

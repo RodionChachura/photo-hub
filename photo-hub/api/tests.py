@@ -65,7 +65,7 @@ class Test(TestCase):
         return True
 
     def test_photos_urls(self):
-        response = self.client.post('/api/photos/', self.get_testPhoto(), format="multipart")
+        response = self.client.post('/api/photos/', self.get_testPhoto())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.content)
         response = self.client.get('/api/photos/', format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)

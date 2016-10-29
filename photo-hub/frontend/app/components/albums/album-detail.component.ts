@@ -31,11 +31,21 @@ export class AlbumDetailComponent implements OnInit {
         this.dataService.getAlbum(this.albumId).subscribe((albumDetail: IAlbumDetail) => {
                 this.albumDetail = albumDetail;
                 this.isOwner = albumDetail.userId == this.dataService.getCurrentUserId();
-                console.log(albumDetail)
-                console.log(this.isOwner);
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load album: ' + error);
+            });
+    }
+
+    delete(photo){
+        this.dataService.deletePhoto(photo.id).subscribe((res) => {
+                var index = this.albumDetail.photos.indexOf(photo, 0);
+                if (index > -1) {
+                    this.albumDetail.photos.splice(index, 1);
+                }
+            },
+            error => {
+                this.notificationService.printErrorMessage('Failed to delete ' + photo.title + ' ' + error);
             });
     }
 

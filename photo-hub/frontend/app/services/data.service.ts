@@ -98,12 +98,11 @@ export class DataService {
             .catch(this.handleError);
     }
 
-    uploadPhotoToAlbum(image: any, name: string, albumId: number): Observable<void>{
+    uploadPhotoToAlbum(image: any, title: string, albumId: number): Observable<void>{
         let input = new FormData();
         input.append("image", image);
-        input.append("title", name);
+        input.append("title", title);
         input.append("albumId", albumId);
-        console.log(input);
         return this.http.post(this.apiUri + 'photos/', input, this.headers(true))
             .map((res: Response) => {
                 return res.json();
@@ -111,6 +110,14 @@ export class DataService {
             .catch(this.handleError);
     }
 
+    deletePhoto(id: number): Observable<void> {
+        return this.http.delete(this.apiUri + 'photos/' + id + '/', this.headers())
+            .map((res: Response) => {
+                return;
+            })
+            .catch(this.handleError);  
+    }
+    
     private handleError(error: any) {
         var applicationError = error.headers.get('Application-Error');
         var serverError = error.json();

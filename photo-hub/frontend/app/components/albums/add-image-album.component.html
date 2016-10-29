@@ -11,13 +11,27 @@
                 </h1>
             </div>
             <div class="modal-body">
-                <form class="form col-md-12 center-block" #albumForm="ngForm">
+                <form class="form col-md-12 center-block" #addImageAlbum="ngForm">
                     <div class="form-group">
-                        <input #fileInput type="file"/>
-                        <button (click)="upload()">Add</button>
+                        <div class="input-group">
+                            <label class="input-group-btn">
+                                <span class="btn btn-lg btn-primary btn-block">
+                                    Upload <input type="file" #photo style="display: none;" (change)="uploadChanged()">
+                                </span>
+                            </label>
+                            <input type="text" class="form-control input-lg" placeholder="Photo title" [(ngModel)]="_title"
+                                required  maxlength="20" 
+                                name="title" id="title" ngControl="title" #title="ngModel" />
+                        </div>
+                        <div [hidden]="title.valid || title.untouched" class="alert alert-danger">
+                                Title is required
+                        </div>
+                        <div [hidden]="attachment" class="alert alert-info">
+                                Upload file please
+                        </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-lg btn-block" (click)="create()" [disabled]="!albumForm.form.valid">Create</button>
+                        <button class="btn btn-primary btn-lg btn-block" (click)="upload()" [disabled]="!title.valid || !attachment">Add</button>
                     </div>
                 </form>
             </div>
