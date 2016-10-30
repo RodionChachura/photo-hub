@@ -9,6 +9,7 @@ import { AddAlbumComponent }  from './components/albums/add-album.component';
 import { AddImageAlbumComponent }  from './components/albums/add-image-album.component';
 import { AlbumDetailComponent }  from './components/albums/album-detail.component';
 import { PhotosComponent }  from './components/photos/photos.component';
+import { AddImageComponent }  from './components/photos/add-image.component';
 import { UsersComponent }  from './components/users/users.component';
 import { AuthGuard } from './guards/auth.guard'
 
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
     { path: 'albums', component: AlbumsComponent, canActivate: [AuthGuard] },
     { path: 'add-album', component: AddAlbumComponent, canActivate: [AuthGuard] },
     { path: 'add-image-album/:id', component: AddImageAlbumComponent, canActivate: [AuthGuard] },
+    { path: 'add-image', component: AddImageComponent, canActivate: [AuthGuard] },
     { path: 'albums/:id', component: AlbumDetailComponent, canActivate: [AuthGuard] },
     { path: 'photos', component : PhotosComponent, canActivate: [AuthGuard] },
     { path: 'users', component : UsersComponent, canActivate: [AuthGuard] }

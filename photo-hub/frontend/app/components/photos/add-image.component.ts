@@ -12,9 +12,11 @@ import { IAlbum } from '../../models/album';
 })
 export class AddImageComponent implements OnInit {
     private _title: string;
-    private _photo: any;
-    private attachment: boolean;
-    private albumId: number;
+    private _attachment: boolean;
+    private _userId: number;
+    private _albums: IAlbum[];
+    private _albumId: number;
+    private _noAlbum: string = "No album"
     @ViewChild("photo") photo;
 
     constructor(private route: ActivatedRoute,
@@ -23,29 +25,48 @@ export class AddImageComponent implements OnInit {
         public notificationService: NotificationService) { }
 
     ngOnInit() {
-        this.route.params.subscribe(params =>{
-            this.albumId = params['id'];
-        })
+        this._userId = this.dataService.getCurrentUserId();
+        this.dataService.getUserAlbums(this._userId)
+            .subscribe((albums: IAlbum[]) => {
+                    this._albums = albums;
+                    if(this._albums.length != 0){
+                        // really bad code!
+                        this._albums.push({id: 0, title: this._noAlbum, creationDate: Date.prototype, totalPhotos: 0, userId: 0, username: '', thumbnail: ''})
+                        this._albumId = 0;
+                    }
+                });
     }
 
     uploadChanged(): void {
         let fi = this.photo.nativeElement;
-        this.attachment = (fi.files && fi.files[0])? true : false; 
+        this._attachment = (fi.files && fi.files[0])? true : false; 
     }
 
     upload(): void {
         let fi = this.photo.nativeElement;
+
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            
-            this.dataService.uploadPhotoToAlbum(fileToUpload, this._title, this.albumId)
-                .subscribe(res => {
-                    this.router.navigate(['/albums', this.albumId]);
-                    this.notificationService.printSuccessMessage(this._title + ' uploaded!');
-                },
-                error => {
-                this.notificationService.printErrorMessage('Failed to load image ' + error);
-            });
+            if(this._albumId == 0){
+                this.dataService.uploadPhoto(fileToUpload, this._title)
+                    .subscribe(res => {
+                        this.router.navigate(['/albums'], {queryParams: {user_id: this._userId}});
+                        this.notificationService.printSuccessMessage(this._title + ' uploaded!');
+                    },
+                    error => {
+                    this.notificationService.printErrorMessage('Failed to load image ' + error);
+                });
+            }
+            else{
+                this.dataService.uploadPhotoToAlbum(fileToUpload, this._title, this._albumId)
+                    .subscribe(res => {
+                        this.router.navigate(['/albums'], {queryParams: {user_id: this._userId}});
+                        this.notificationService.printSuccessMessage(this._title + ' uploaded!');
+                    },
+                    error => {
+                    this.notificationService.printErrorMessage('Failed to load image ' + error);
+                });
+            }
         }
     }
 }

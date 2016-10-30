@@ -14,6 +14,7 @@ import { NotificationService } from '../../services/notification.service';
 })
 export class PhotosComponent implements OnInit {
     private photos: IPhoto[];
+    private userId: number;
     private username: string;
     private isOwner: boolean;
 
@@ -24,18 +25,17 @@ export class PhotosComponent implements OnInit {
         private notificationService: NotificationService) {}
 
     ngOnInit() {
-        var userId: number;
         this.route.queryParams.subscribe(params =>{
-            userId = params['user_id'] || null;
+            this.userId = params['user_id'] || null;
         })
-        this.dataService.getUserPhotos(userId)
+        this.dataService.getUserPhotos(this.userId)
             .subscribe((photos: IPhoto[]) => {
                 this.photos = photos;
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load photos. ' + error);
             });
-        if (userId == this.dataService.getCurrentUserId()){
+        if (this.userId == this.dataService.getCurrentUserId()){
             this.isOwner = true;
             this.username = this.dataService.getCurrentUserUsername()
         }

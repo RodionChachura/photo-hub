@@ -26,6 +26,7 @@ import { AlbumDetailComponent }  from './components/albums/album-detail.componen
 import { AddAlbumComponent }  from './components/albums/add-album.component';
 import { AddImageAlbumComponent }  from './components/albums/add-image-album.component';
 import { PhotosComponent }  from './components/photos/photos.component';
+import { AddImageComponent }  from './components/photos/add-image.component';
 import { UsersComponent }  from './components/users/users.component';
 
 
@@ -56,6 +57,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         AddImageAlbumComponent,
         AlbumDetailComponent,
         PhotosComponent,
+        AddImageComponent,
         UsersComponent,
         EqualValidator,
         AttachmentValidator

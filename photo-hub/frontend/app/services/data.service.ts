@@ -110,6 +110,17 @@ export class DataService {
             .catch(this.handleError);
     }
 
+    uploadPhoto(image: any, title: string): Observable<void>{
+        let input = new FormData();
+        input.append("image", image);
+        input.append("title", title);
+        return this.http.post(this.apiUri + 'photos/', input, this.headers(true))
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(this.handleError);
+    }
+
     deletePhoto(id: number): Observable<void> {
         return this.http.delete(this.apiUri + 'photos/' + id + '/', this.headers())
             .map((res: Response) => {
