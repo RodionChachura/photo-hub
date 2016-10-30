@@ -25,6 +25,7 @@ import { AlbumsComponent }  from './components/albums/albums.component';
 import { AlbumDetailComponent }  from './components/albums/album-detail.component';
 import { AddAlbumComponent }  from './components/albums/add-album.component';
 import { AddImageAlbumComponent }  from './components/albums/add-image-album.component';
+import { ChangeAlbumComponent }  from './components/albums/change-album.component';
 import { PhotosComponent }  from './components/photos/photos.component';
 import { AddImageComponent }  from './components/photos/add-image.component';
 import { UsersComponent }  from './components/users/users.component';
@@ -55,6 +56,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         AlbumsComponent,
         AddAlbumComponent,
         AddImageAlbumComponent,
+        ChangeAlbumComponent,
         AlbumDetailComponent,
         PhotosComponent,
         AddImageComponent,

@@ -13,7 +13,7 @@ import { NotificationService } from '../../services/notification.service';
     templateUrl: 'static/app/components/users/users.component.html'
 })
 export class UsersComponent implements OnInit {
-    private users: IUser[];
+    private _users: IUser[];
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -25,10 +25,10 @@ export class UsersComponent implements OnInit {
     ngOnInit() {
         this.dataService.getUsers()
             .subscribe((users: IUser[]) => {
-                this.users = users;
+                this._users = users;
             },
             error => {
-                this.notificationService.printErrorMessage('Failed to load users. ' + error);
+                this.notificationService.printErrorMessage('Failed to load users ' + error);
             });
     }
 

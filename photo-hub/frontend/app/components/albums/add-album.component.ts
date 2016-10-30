@@ -10,9 +10,13 @@ import { IAlbum } from '../../models/album';
     selector: 'add-album',
     templateUrl: 'static/app/components/albums/add-album.component.html',
 })
-export class AddAlbumComponent {
+export class AddAlbumComponent implements OnInit{
     private _title: string;
+    private _userId: number;
 
+    ngOnInit(){
+        this._userId = this.dataService.getCurrentUserId();
+    }
     constructor(public dataService: DataService,
                 public notificationService: NotificationService,
                 public router: Router) { }

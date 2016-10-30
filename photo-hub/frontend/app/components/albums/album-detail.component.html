@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                {{albumDetail?.username}} {{albumDetail?.title}} album
-                <button *ngIf="isOwner" type="button" class="btn btn-success" [routerLink]="['/add-image-album/:id', {id: albumId}]"><i class="fa fa-plus"></i></button>
+                {{_albumDetail?.username}} {{_albumDetail?.title}} album
+                <button *ngIf="_isOwner" type="button" class="btn btn-success" [routerLink]="['/add-image-album/:id', {id: _albumId}]"><i class="fa fa-plus"></i></button>
             </h1>
         </div>
     </div>
 
     <div class="row text-center">
-        <div class="col-md-3 col-sm-6 hero-feature" *ngFor="let photo of albumDetail?.photos">
+        <div class="col-md-3 col-sm-6 hero-feature" *ngFor="let photo of _albumDetail?.photos">
             <div class="thumbnail blue-thumb">
                 <a class="fancybox center-block" rel="gallery" href="{{photo.image}}" title="{{photo.title}}">
                     <img class="media-object center-block" height="120" src="{{photo.image}}" alt="" />
@@ -18,7 +18,7 @@
                     <div class="row remove-caption">
                         <div class="col-xs-10 dateCaption">{{convertDateTime(photo.creationDate)}}</div>
                         <div class="col-xs-2 buttonCaption">
-                            <button *ngIf="isOwner" class="btn btn-xs btn-danger" (click)="delete(photo)">
+                            <button *ngIf="_isOwner" class="btn btn-xs btn-danger" (click)="delete(photo)">
                                 <span class="fa-stack fa-1x">
                                     <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
                                 </span>

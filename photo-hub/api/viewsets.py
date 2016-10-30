@@ -53,6 +53,17 @@ class AlbumViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def perform_update(self, serializer):
+        #serializer = AlbumSerializer(partial=True)
+        serializer.save(user=self.request.user)
+
+    #def partial_update(self, request, *args, **kwargs):
+    #    instance = self.get_object()
+    #    serializer = self.serialize(instance, data=request.data, partial=True)
+    #    serializer.is_valid(raise_exception=True)
+    #    new_instance = serializer.save()
+    #    return Response(serializer.data)
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer 

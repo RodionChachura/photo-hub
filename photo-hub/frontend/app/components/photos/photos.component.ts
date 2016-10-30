@@ -13,10 +13,10 @@ import { NotificationService } from '../../services/notification.service';
     templateUrl: 'static/app/components/photos/photos.component.html'
 })
 export class PhotosComponent implements OnInit {
-    private photos: IPhoto[];
-    private userId: number;
-    private username: string;
-    private isOwner: boolean;
+    private _photos: IPhoto[];
+    private _userId: number;
+    private _username: string;
+    private _isOwner: boolean;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -26,22 +26,22 @@ export class PhotosComponent implements OnInit {
 
     ngOnInit() {
         this.route.queryParams.subscribe(params =>{
-            this.userId = params['user_id'] || null;
+            this._userId = params['user_id'] || null;
         })
-        this.dataService.getUserPhotos(this.userId)
+        this.dataService.getUserPhotos(this._userId)
             .subscribe((photos: IPhoto[]) => {
-                this.photos = photos;
+                this._photos = photos;
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load photos. ' + error);
             });
-        if (this.userId == this.dataService.getCurrentUserId()){
-            this.isOwner = true;
-            this.username = this.dataService.getCurrentUserUsername()
+        if (this._userId == this.dataService.getCurrentUserId()){
+            this._isOwner = true;
+            this._username = this.dataService.getCurrentUserUsername()
         }
         else{
-            if(this.photos.length > 0){
-                this.username = this.photos[0].username;
+            if(this._photos.length > 0){
+                this._username = this._photos[0].username;
             }
             else{
                 this.router.navigate(['/users']);

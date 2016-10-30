@@ -13,9 +13,9 @@ import { NotificationService } from '../../services/notification.service';
     templateUrl: 'static/app/components/albums/album-detail.component.html'
 })
 export class AlbumDetailComponent implements OnInit {
-    private albumDetail: IAlbumDetail;
-    private albumId: number;
-    private isOwner: boolean;
+    private _albumDetail: IAlbumDetail;
+    private _albumId: number;
+    private _isOwner: boolean;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -25,12 +25,12 @@ export class AlbumDetailComponent implements OnInit {
 
     ngOnInit() {
         this.route.params.subscribe(params =>{
-            this.albumId = params['id'];
-            console.log(this.albumId);
+            this._albumId = params['id'];
+            console.log(this._albumId);
         })
-        this.dataService.getAlbum(this.albumId).subscribe((albumDetail: IAlbumDetail) => {
-                this.albumDetail = albumDetail;
-                this.isOwner = albumDetail.userId == this.dataService.getCurrentUserId();
+        this.dataService.getAlbum(this._albumId).subscribe((albumDetail: IAlbumDetail) => {
+                this._albumDetail = albumDetail;
+                this._isOwner = albumDetail.userId == this.dataService.getCurrentUserId();
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load album: ' + error);
@@ -39,9 +39,9 @@ export class AlbumDetailComponent implements OnInit {
 
     delete(photo){
         this.dataService.deletePhoto(photo.id).subscribe((res) => {
-                var index = this.albumDetail.photos.indexOf(photo, 0);
+                var index = this._albumDetail.photos.indexOf(photo, 0);
                 if (index > -1) {
-                    this.albumDetail.photos.splice(index, 1);
+                    this._albumDetail.photos.splice(index, 1);
                 }
             },
             error => {

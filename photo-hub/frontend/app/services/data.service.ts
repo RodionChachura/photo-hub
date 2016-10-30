@@ -82,6 +82,15 @@ export class DataService {
             .catch(this.handleError);
     }
 
+    changeAlbumTitle(id: number, title: string): Observable<void>{
+        let json = JSON.stringify({id: id, title: title});
+        return this.http.patch(this.apiUri + 'albums/' + id + '/', json, this.headers())
+            .map((res: Response) => {
+                return;
+            })
+            .catch(this.handleError);  
+    }
+
     getUserPhotos(userId): Observable<IPhoto[]>{
         return this.http.get(this.apiUri + 'photos/' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {

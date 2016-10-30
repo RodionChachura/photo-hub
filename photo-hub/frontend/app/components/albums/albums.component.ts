@@ -12,10 +12,10 @@ import { NotificationService } from '../../services/notification.service';
     templateUrl: 'static/app/components/albums/albums.component.html'
 })
 export class AlbumsComponent implements OnInit {
-    private albums: IAlbum[];
-    private userId: number;
-    private username: string
-    private isOwner: boolean;
+    private _albums: IAlbum[];
+    private _userId: number;
+    private _username: string
+    private _isOwner: boolean;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -27,24 +27,24 @@ export class AlbumsComponent implements OnInit {
     ngOnInit() {
         var userId: number;
         this.route.queryParams.subscribe(params =>{
-            this.userId = params['user_id'] || null;
+            this._userId = params['user_id'] || null;
         })
-        if (this.userId != null)
+        if (this._userId != null)
         {
-            this.dataService.getUserAlbums(this.userId)
+            this.dataService.getUserAlbums(this._userId)
                 .subscribe((albums: IAlbum[]) => {
-                    this.albums = albums;
+                    this._albums = albums;
                 },
                 error => {
                     this.notificationService.printErrorMessage('Failed to load albums. ' + error);
                 });
-            if (this.userId == this.dataService.getCurrentUserId()){
-                this.username = this.dataService.getCurrentUserUsername()
-                this.isOwner = true;
+            if (this._userId == this.dataService.getCurrentUserId()){
+                this._username = this.dataService.getCurrentUserUsername()
+                this._isOwner = true;
             }
             else{
-                if(this.albums.length > 0){
-                    this.username = this.albums[0].username;
+                if(this._albums.length > 0){
+                    this._username = this._albums[0].username;
                 }
                 this.router.navigate(['/users']);
                 this.notificationService.printErrorMessage("this user doesn't have any albums. How you appear here?")
@@ -54,9 +54,9 @@ export class AlbumsComponent implements OnInit {
 
     deleteAlbum(album: IAlbum){
         this.dataService.deleteAlbum(album.id).subscribe((res) => {
-                var index = this.albums.indexOf(album, 0);
+                var index = this._albums.indexOf(album, 0);
                 if (index > -1) {
-                    this.albums.splice(index, 1);
+                    this._albums.splice(index, 1);
                 }
             },
             error => {

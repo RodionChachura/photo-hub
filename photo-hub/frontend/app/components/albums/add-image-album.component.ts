@@ -13,8 +13,9 @@ import { IAlbum } from '../../models/album';
 export class AddImageAlbumComponent implements OnInit {
     private _title: string;
     private _photo: any;
-    private attachment: boolean;
-    private albumId: number;
+    private _attachment: boolean;
+    private _albumId: number;
+    private _userId: number;
     @ViewChild("photo") photo;
 
     constructor(private route: ActivatedRoute,
@@ -24,13 +25,14 @@ export class AddImageAlbumComponent implements OnInit {
 
     ngOnInit() {
         this.route.params.subscribe(params =>{
-            this.albumId = params['id'];
+            this._albumId = params['id'];
         })
+        this._userId = this.dataService.getCurrentUserId();
     }
 
     uploadChanged(): void {
         let fi = this.photo.nativeElement;
-        this.attachment = (fi.files && fi.files[0])? true : false; 
+        this._attachment = (fi.files && fi.files[0])? true : false; 
     }
 
     upload(): void {
@@ -38,9 +40,9 @@ export class AddImageAlbumComponent implements OnInit {
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
             
-            this.dataService.uploadPhotoToAlbum(fileToUpload, this._title, this.albumId)
+            this.dataService.uploadPhotoToAlbum(fileToUpload, this._title, this._albumId)
                 .subscribe(res => {
-                    this.router.navigate(['/albums', this.albumId]);
+                    this.router.navigate(['/albums', this._albumId]);
                     this.notificationService.printSuccessMessage(this._title + ' uploaded!');
                 },
                 error => {

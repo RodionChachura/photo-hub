@@ -6,14 +6,14 @@
                 <h1 class="text-center">
                     <span class="fa-stack fa-1x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
-                    </span>Add Album
+                        <i class="fa fa-pencil-square-o fa-stack-1x fa-inverse"></i>
+                    </span>Change Album
                 </h1>
             </div>
             <div class="modal-body">
                 <form class="form col-md-12 center-block" #albumForm="ngForm">
                     <div class="form-group">
-                        <input type="text" class="form-control input-lg" placeholder="Album name" [(ngModel)]="_title"
+                        <input type="text" class="form-control input-lg" placeholder="New album name" [(ngModel)]="_title"
                             required minlength="2" maxlength="30"
                             name="title" id="title" ngControl="title" #title="ngModel" />
                         <div [hidden]="title.valid || title.untouched" class="alert alert-danger">
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-lg btn-block" (click)="create()" [disabled]="!albumForm.form.valid">Create</button>
+                        <button class="btn btn-primary btn-lg btn-block" (click)="change()"[disabled]="!albumForm.form.valid">Change</button>
                     </div>
                 </form>
             </div>
