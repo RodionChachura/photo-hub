@@ -6,6 +6,7 @@ bin/
 obj/
 env/
 uploaded_media/
+static/
 
 test_image_folder/
 node_modules/
