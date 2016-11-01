@@ -18,16 +18,22 @@ import { AttachmentValidator } from './directives/attachment-validator.directive
 import { AuthGuard } from './guards/auth.guard'
 
 import { AppComponent }  from './app.component';
+
 import { HomeComponent }  from './components/home/home.component';
+
 import { LoginComponent }  from './components/login/login.component';
 import { RegisterComponent }  from './components/register/register.component';
+
 import { AlbumsComponent }  from './components/albums/albums.component';
 import { AlbumDetailComponent }  from './components/albums/album-detail.component';
 import { AddAlbumComponent }  from './components/albums/add-album.component';
 import { AddImageAlbumComponent }  from './components/albums/add-image-album.component';
 import { ChangeAlbumComponent }  from './components/albums/change-album.component';
+
 import { PhotosComponent }  from './components/photos/photos.component';
 import { AddImageComponent }  from './components/photos/add-image.component';
+import { ChangeImageComponent }  from './components/photos/change-image.component';
+
 import { UsersComponent }  from './components/users/users.component';
 
 
@@ -60,6 +66,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         AlbumDetailComponent,
         PhotosComponent,
         AddImageComponent,
+        ChangeImageComponent,
         UsersComponent,
         EqualValidator,
         AttachmentValidator

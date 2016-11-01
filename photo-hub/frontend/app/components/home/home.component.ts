@@ -5,8 +5,5 @@ import {Component} from '@angular/core';
     templateUrl: 'static/app/components/home/home.component.html',
 })
 export class HomeComponent {
-
-    constructor() {
-
-    }
+    constructor() {}
 }

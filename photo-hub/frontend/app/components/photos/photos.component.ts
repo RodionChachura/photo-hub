@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router'; 
 
 import { IPhoto } from '../../models/photo';
@@ -7,12 +7,13 @@ import { DataService } from '../../services/data.service';
 import { UtilityService } from '../../services/utility.service';
 import { NotificationService } from '../../services/notification.service';
 
+declare var jQuery: any;
 
 @Component({
     selector: 'photos',
     templateUrl: 'static/app/components/photos/photos.component.html'
 })
-export class PhotosComponent implements OnInit {
+export class PhotosComponent implements OnInit{
     private _photos: IPhoto[];
     private _userId: number;
     private _username: string;
@@ -52,9 +53,9 @@ export class PhotosComponent implements OnInit {
 
     delete(photo){
         this.dataService.deletePhoto(photo.id).subscribe((res) => {
-                var index = this.photos.indexOf(photo, 0);
+                var index = this._photos.indexOf(photo, 0);
                 if (index > -1) {
-                    this.photos.splice(index, 1);
+                    this._photos.splice(index, 1);
                 }
             },
             error => {

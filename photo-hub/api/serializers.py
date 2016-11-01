@@ -26,7 +26,7 @@ class RelatedToUserModelSerializer(serializers.ModelSerializer):
         return User.objects.get(id=obj.user_id).username
 
 class PhotoSerializer(RelatedToUserModelSerializer):
-    album_id = serializers.PrimaryKeyRelatedField(required=False, queryset=Album.objects)
+    album_id = serializers.PrimaryKeyRelatedField(required=False, allow_null=True, queryset=Album.objects)
     album_title = serializers.SerializerMethodField(read_only=True, required=False)
 
     def create(self, validated_data):

@@ -20,6 +20,10 @@ export class ChangeAlbumComponent implements OnInit {
             this._albumId = params['id'];
         })
         this._userId = this.dataService.getCurrentUserId();
+        this.dataService.getAlbum(this._albumId)
+            .subscribe((album: IAlbum) => {
+                this._title = album.title;
+            })
     }
     constructor(private route: ActivatedRoute,
                 public router: Router,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router'; 
 
 import { IAlbum } from '../../models/album';
@@ -7,11 +7,13 @@ import { DataService } from '../../services/data.service';
 import { UtilityService } from '../../services/utility.service';
 import { NotificationService } from '../../services/notification.service';
 
+declare var jQuery: any;
+
 @Component({
     selector: 'albums',
     templateUrl: 'static/app/components/albums/albums.component.html'
 })
-export class AlbumsComponent implements OnInit {
+export class AlbumsComponent implements OnInit{
     private _albums: IAlbum[];
     private _userId: number;
     private _username: string

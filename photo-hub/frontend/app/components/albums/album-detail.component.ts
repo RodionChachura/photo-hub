@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute }  from '@angular/router';
 import { IPhoto } from '../../models/photo';
 import { IAlbumDetail } from '../../models/album-detail';
@@ -7,12 +7,13 @@ import { DataService } from '../../services/data.service';
 import { UtilityService } from '../../services/utility.service';
 import { NotificationService } from '../../services/notification.service';
 
+declare var jQuery: any;
 
 @Component({
     selector: 'album-detail',
     templateUrl: 'static/app/components/albums/album-detail.component.html'
 })
-export class AlbumDetailComponent implements OnInit {
+export class AlbumDetailComponent implements OnInit{
     private _albumDetail: IAlbumDetail;
     private _albumId: number;
     private _isOwner: boolean;

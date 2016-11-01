@@ -14,7 +14,7 @@ from api.serializers import PhotoSerializer, AlbumSerializer, AlbumDetailSeriali
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
-    parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (MultiPartParser, FormParser, CamelCaseJSONParser)
     permission_classes = (IsOwnerOrReadOnly, permissions.IsAuthenticated)
 
     def get_queryset(self):
@@ -27,8 +27,16 @@ class PhotoViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(album_id=album_id)
         return queryset
 
+    def perform_update(self, serializer):
+        if 'album_id' in self.request.data:
+            serializer.save(user=self.request.user, album_id = self.request.data['album_id'])
+        else:
+            serializer.save(user=self.request.user)
+
     def perform_create(self, serializer):
-        # bad code
+        # this little hack used for transfer field from form data 
+        # to serializer with changed naem, in other circumstances this work
+        # done using CamelCaseJSONParser
         if 'albumId' in self.request.data:
             serializer.save(user=self.request.user, album_id = self.request.data['albumId'])
         else:
@@ -54,15 +62,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def perform_update(self, serializer):
-        #serializer = AlbumSerializer(partial=True)
         serializer.save(user=self.request.user)
-
-    #def partial_update(self, request, *args, **kwargs):
-    #    instance = self.get_object()
-    #    serializer = self.serialize(instance, data=request.data, partial=True)
-    #    serializer.is_valid(raise_exception=True)
-    #    new_instance = serializer.save()
-    #    return Response(serializer.data)
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()

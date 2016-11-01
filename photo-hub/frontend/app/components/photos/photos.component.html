@@ -8,20 +8,26 @@
             </h1>
         </div>
     </div>
-
-    <div class="row text-center">
-        <div class="col-md-3 col-sm-6 hero-feature" *ngFor="let photo of _photos">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 " *ngFor="let photo of _photos">
             <div class="thumbnail blue-thumb">
                 <a class="fancybox center-block" rel="gallery" href="{{photo.image}}" title="{{photo.title}}">
                     <img class="media-object center-block" height="120" src="{{photo.image}}" alt="" />
                 </a>
                 <div class="row caption img-caption">
                     <div class="row remove-caption">
-                        <div class="col-xs-10 dateCaption">{{convertDateTime(photo.creationDate)}}</div>
+                        <div class="col-xs-8 dateCaption text-left">{{convertDateTime(photo.creationDate)}}</div>
                         <div class="col-xs-2 buttonCaption">
                             <button *ngIf="_isOwner" class="btn btn-xs btn-danger" (click)="delete(photo)">
                                 <span class="fa-stack fa-1x">
                                     <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="col-xs-2 buttonCaption">
+                            <button *ngIf="_isOwner" class="btn btn-xs btn-warning" [routerLink]="['/change-image/:id', {id: photo.id}]">
+                                <span class="fa-stack fa-1x">
+                                    <i class="fa fa-pencil-square-o fa-stack-1x fa-inverse"></i>
                                 </span>
                             </button>
                         </div>

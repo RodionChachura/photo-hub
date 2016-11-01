@@ -137,6 +137,16 @@ export class DataService {
             })
             .catch(this.handleError);  
     }
+
+    changePhoto(id: number, title: string, albumId: number) {
+        var json =  JSON.stringify({title: title, albumId: albumId});
+        
+        return this.http.patch(this.apiUri + 'photos/' + id + '/', json, this.headers())
+            .map((res: Response) => {
+                return;
+            })
+            .catch(this.handleError);  
+    }
     
     private handleError(error: any) {
         var applicationError = error.headers.get('Application-Error');

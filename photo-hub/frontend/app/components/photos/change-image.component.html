@@ -6,24 +6,16 @@
                 <h1 class="text-center">
                     <span class="fa-stack fa-1x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
-                    </span>Add Photo
+                        <i class="fa fa-pencil-square-o fa-stack-1x fa-inverse"></i>
+                    </span>Change Photo
                 </h1>
             </div>
             <div class="modal-body">
                 <form class="form col-md-12 center-block" #addImage="ngForm">
                     <div class="form-group">
-                        <label class="input-group-btn">
-                            <span class="btn btn-lg btn-primary btn-block">
-                                Upload <input type="file" #photo style="display: none;" (change)="uploadChanged()">
-                            </span>
-                        </label>
-                        <input type="text" class="form-control input-lg" placeholder="Photo title" [(ngModel)]="_title"
+                        <input type="text" class="form-control input-lg" placeholder="New Photo title" [(ngModel)]="_title"
                             required  maxlength="30" 
                             name="title" id="title" ngControl="title" #title="ngModel" />
-                        <div [hidden]="_attachment" class="alert alert-info">
-                                Upload file please
-                        </div>
                         <div [hidden]="title.valid || title.untouched" class="alert alert-danger">
                                 Title is required
                         </div>
@@ -31,14 +23,14 @@
                     <div class="form-group">
                         <div *ngIf="_albums && _albums.length > 0" class="form-group">
                             <select class="form-control input-lg" id="selectAlbum" [(ngModel)]="_albumId" name="albumId">
-                                <option *ngFor="let album of _albums" [value]="album.id" [attr.selected]="_albumId == 0 ? true : null">
+                                <option *ngFor="let album of _albums" [value]="album.id" [attr.selected]="_albumId == album.id ? true : null">
                                     {{album.title}}
                                 </option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-lg btn-block" (click)="upload()" [disabled]="!title.valid || !_attachment">Add</button>
+                        <button class="btn btn-primary btn-lg btn-block" (click)="change()" [disabled]="!title.valid">Change</button>
                     </div>
                 </form>
             </div>
