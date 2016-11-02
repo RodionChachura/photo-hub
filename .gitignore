@@ -7,7 +7,7 @@ obj/
 env/
 uploaded_media/
 static/
-
+libs/
 test_image_folder/
 node_modules/
 bower_components/
