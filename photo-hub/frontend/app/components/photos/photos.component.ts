@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router'; 
 
 import { IPhoto } from '../../models/photo';
@@ -32,6 +32,7 @@ export class PhotosComponent implements OnInit{
         this.dataService.getUserPhotos(this._userId)
             .subscribe((photos: IPhoto[]) => {
                 this._photos = photos;
+                this.fancyboxOn();
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load photos. ' + error);
@@ -49,6 +50,15 @@ export class PhotosComponent implements OnInit{
                 this.notificationService.printErrorMessage("this user doesn't have any photo. How you appear here?")
             }
         }
+    }
+
+    fancyboxOn(){
+        jQuery(document).ready(function(){ //Photos Gallery
+            jQuery(".fancybox").fancybox({
+                openEffect: "elastic",
+                closeEffect: "none"
+            });
+        });
     }
 
     delete(photo){

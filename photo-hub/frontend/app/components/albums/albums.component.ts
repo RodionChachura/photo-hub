@@ -36,6 +36,7 @@ export class AlbumsComponent implements OnInit{
             this.dataService.getUserAlbums(this._userId)
                 .subscribe((albums: IAlbum[]) => {
                     this._albums = albums;
+                    this.fancyboxOn();
                 },
                 error => {
                     this.notificationService.printErrorMessage('Failed to load albums. ' + error);
@@ -52,6 +53,15 @@ export class AlbumsComponent implements OnInit{
                 this.notificationService.printErrorMessage("this user doesn't have any albums. How you appear here?")
             }
         }
+    }
+
+    fancyboxOn(){
+        jQuery(document).ready(function(){ //Photos Gallery
+            jQuery(".fancybox").fancybox({
+                openEffect: "elastic",
+                closeEffect: "none"
+            });
+        });
     }
 
     deleteAlbum(album: IAlbum){

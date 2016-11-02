@@ -31,11 +31,21 @@ export class AlbumDetailComponent implements OnInit{
         })
         this.dataService.getAlbum(this._albumId).subscribe((albumDetail: IAlbumDetail) => {
                 this._albumDetail = albumDetail;
+                this.fancyboxOn();
                 this._isOwner = albumDetail.userId == this.dataService.getCurrentUserId();
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load album: ' + error);
             });
+    }
+
+    fancyboxOn(){
+        jQuery(document).ready(function(){ //Photos Gallery
+            jQuery(".fancybox").fancybox({
+                openEffect: "elastic",
+                closeEffect: "none"
+            });
+        });
     }
 
     delete(photo){

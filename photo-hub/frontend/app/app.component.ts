@@ -7,9 +7,16 @@ import { DataService } from './services/data.service';
   selector: 'photohub',
   templateUrl: 'static/app/app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     constructor(private router: Router,
         private dataService: DataService) {}
+        
+    private _userId: string;
+    private _username: string;
+
+    ngOnInit(){
+        this._userId = this.dataService.getCurrentUserId();
+    }
 
     isUserLoggedIn(): boolean{
         if(localStorage.getItem('currentUser'))

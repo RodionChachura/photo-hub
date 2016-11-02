@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <h1 class="page-header">
                 {{_albumDetail?.username}} {{_albumDetail?.title}} album
-                <button *ngIf="_isOwner" type="button" class="btn btn-success" [routerLink]="['/add-image-album/:id', {id: _albumId}]"><i class="fa fa-plus"></i></button>
+                <button *ngIf="_isOwner" type="button" class="btn btn-success" [routerLink]="['/add-image-album', _albumId]"><i class="fa fa-plus"></i></button>
             </h1>
         </div>
     </div>
@@ -25,7 +25,7 @@
                             </button>
                         </div>
                         <div class="col-xs-2 buttonCaption">
-                            <button *ngIf="_isOwner" class="btn btn-xs btn-warning" [routerLink]="['/change-image/:id', {id: photo.id}]">
+                            <button *ngIf="_isOwner" class="btn btn-xs btn-warning" [routerLink]="['/change-image', photo.id]">
                                 <span class="fa-stack fa-1x">
                                     <i class="fa fa-pencil-square-o fa-stack-1x fa-inverse"></i>
                                 </span>
