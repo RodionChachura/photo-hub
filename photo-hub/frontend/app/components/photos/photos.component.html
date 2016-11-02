@@ -9,14 +9,6 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3 col-md-4 col-xs-6 picture-box" *ngFor="let photo of _photos">
-            <a class="fancybox" rel="gallery" href="{{photo.image}}">
-                <img src="{{photo.image}}" alt="{{photo.title}}" class="img img-responsive full-width thumbnail" />
-            </a>
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-md-3 col-sm-6 " *ngFor="let photo of _photos">
             <div class="thumbnail blue-thumb">
                 <a class="fancybox" rel="gallery" href="{{photo.image}}" title="{{photo.title}}">
