@@ -12,6 +12,7 @@ import { IAlbum } from '../../models/album';
 })
 export class AddAlbumComponent implements OnInit{
     private _title: string;
+    private _private: boolean = false;
     private _userId: number;
 
     ngOnInit(){
@@ -21,8 +22,9 @@ export class AddAlbumComponent implements OnInit{
                 public notificationService: NotificationService,
                 public router: Router) { }
 
+    log(){console.log(this._private)}
     create(): void {
-        this.dataService.createAlbum(this._title).subscribe((album: IAlbum) =>{
+        this.dataService.createAlbum(this._title, this._private).subscribe((album: IAlbum) =>{
                 this.notificationService.printSuccessMessage(this._title + " album created!");
                 this.router.navigate(['/albums'], {queryParams: {user_id: this.dataService.getCurrentUserId()}});
             },

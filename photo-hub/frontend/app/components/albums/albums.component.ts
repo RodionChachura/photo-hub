@@ -36,6 +36,7 @@ export class AlbumsComponent implements OnInit{
             this.dataService.getUserAlbums(this._userId)
                 .subscribe((albums: IAlbum[]) => {
                     this._albums = albums;
+                    console.log(this._albums)
                     this.fancyboxOn();
                 },
                 error => {

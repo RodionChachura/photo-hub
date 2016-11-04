@@ -47,26 +47,15 @@ export class AddImageComponent implements OnInit {
 
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            if(this._albumId == 0){
-                this.dataService.uploadPhoto(fileToUpload, this._title)
-                    .subscribe(res => {
-                        this.router.navigate(['/albums'], {queryParams: {user_id: this._userId}});
-                        this.notificationService.printSuccessMessage(this._title + ' uploaded!');
-                    },
-                    error => {
-                    this.notificationService.printErrorMessage('Failed to load image ' + error);
-                });
-            }
-            else{
-                this.dataService.uploadPhotoToAlbum(fileToUpload, this._title, this._albumId)
-                    .subscribe(res => {
-                        this.router.navigate(['/albums'], {queryParams: {user_id: this._userId}});
-                        this.notificationService.printSuccessMessage(this._title + ' uploaded!');
-                    },
-                    error => {
-                    this.notificationService.printErrorMessage('Failed to load image ' + error);
-                });
-            }
+            this.dataService.createPhoto(fileToUpload, this._title, (this._albumId == 0)? null: this._albumId)
+                .subscribe(res => {
+                    this.router.navigate(['/albums'], {queryParams: {user_id: this._userId}});
+                    this.notificationService.printSuccessMessage(this._title + ' uploaded!');
+                },
+                error => {
+                this.notificationService.printErrorMessage('Failed to load image ' + error);
+            });
+            
         }
     }
 }

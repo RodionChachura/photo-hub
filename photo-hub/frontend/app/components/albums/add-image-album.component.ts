@@ -40,7 +40,7 @@ export class AddImageAlbumComponent implements OnInit {
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
             
-            this.dataService.uploadPhotoToAlbum(fileToUpload, this._title, this._albumId)
+            this.dataService.createPhoto(fileToUpload, this._title, this._albumId)
                 .subscribe(res => {
                     this.router.navigate(['/albums', this._albumId]);
                     this.notificationService.printSuccessMessage(this._title + ' uploaded!');

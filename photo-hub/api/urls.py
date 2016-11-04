@@ -3,7 +3,7 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify
 from rest_framework.routers import DefaultRouter
 from api import views, viewsets
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 
 router.register(r'albums', viewsets.AlbumViewSet)
 router.register(r'photos', viewsets.PhotoViewSet)

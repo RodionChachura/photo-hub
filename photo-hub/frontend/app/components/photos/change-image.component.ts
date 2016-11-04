@@ -46,7 +46,7 @@ export class ChangeImageComponent implements OnInit {
 
     change(): void {
         if(this._albumId == 0){
-            this.dataService.changePhoto(this._photoId, this._title, (this._albumId==0)? null : this._albumId)
+            this.dataService.createPhoto(this._photoId, this._title, (this._albumId==0)? null : this._albumId)
                 .subscribe(res =>{
                     this.notificationService.printSuccessMessage("Photo changed!");
                     this.router.navigate(['/photos'], {queryParams: {user_id: this._userId}});
