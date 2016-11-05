@@ -35,15 +35,14 @@ class PhotoSerializer(RelatedToUserModelSerializer):
 
     class Meta:
         model = Photo
-        fields = ('id', 'title', 'image', 'creation_date', 'album_id', 'album_title', 'user_id', 'username')
-        read_only_fields=('id', 'creation_date', 'album_title', 'user_id', 'username')
+        fields = ('id', 'title', 'image', 'creation_date', 'album_id', 'private', 'album_title', 'user_id', 'username')
+        read_only_fields=('id', 'creation_date', 'private', 'album_title', 'user_id', 'username')
 
     def get_album_title(self, obj):
         if obj.album_id:
             return Album.objects.get(id=obj.album_id).title
         else:
             return ''
-
 
 class AlbumBaseSerializer(RelatedToUserModelSerializer):
     total_photos = serializers.SerializerMethodField()
@@ -69,7 +68,7 @@ class AlbumSerializer(AlbumBaseSerializer):
 
     class Meta:
         model = Album
-        fields = ('id', 'title', 'creation_date', 'total_photos', 'user_id', 'username', 'thumbnail')
+        fields = ('id', 'title', 'creation_date', 'total_photos', 'private', 'user_id', 'username', 'thumbnail')
         read_only_fields=('id', 'creation_date', 'total_photos', 'user_id', 'username', 'thumbnail')
 
 class AlbumDetailSerializer(AlbumBaseSerializer):
@@ -77,7 +76,7 @@ class AlbumDetailSerializer(AlbumBaseSerializer):
 
     class Meta:
         model = Album
-        fields = ('id', 'title', 'creation_date', 'photos', 'total_photos', 'user_id', 'username')
+        fields = ('id', 'title', 'creation_date', 'photos', 'total_photos', 'private', 'user_id', 'username')
         read_only_fields=('id', 'creation_date', 'total_photos', 'user_id', 'username')
 
 

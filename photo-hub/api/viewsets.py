@@ -6,6 +6,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from djangorestframework_camel_case.parser import CamelCaseJSONParser
 from django.contrib.auth.models import User
 
+from django.db.models import Q
+
 from api.permissions import IsOwnerOrReadOnly
 from api.models import Photo, Album
 from api.serializers import PhotoSerializer, AlbumSerializer, AlbumDetailSerializer, UserSerializer
@@ -20,11 +22,11 @@ class PhotoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Photo.objects.all()
         user_id = self.request.query_params.get('user_id', None)
+        user = self.request.user
+        available_albums = Album.objects.all().filter(Q(user_id=user.id) | Q(private=False))
         if user_id != None:
             queryset = queryset.filter(user_id=user_id)
-        album_id = self.request.query_params.get('album_id', None)
-        if album_id != None:
-            queryset = queryset.filter(album_id=album_id)
+        queryset = queryset.filter(Q(album__in=available_albums) | Q(album=None))
         return queryset
 
     def perform_update(self, serializer):
@@ -49,8 +51,12 @@ class AlbumViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Album.objects.all()
         user_id = self.request.query_params.get('user_id', None)
+        user = self.request.user
         if user_id != None:
             queryset = queryset.filter(user_id=user_id)
+        queryset = queryset.filter(Q(user_id=user.id) | Q(private=False))
+        #queryset = [x for x in queryset if x.user_id==self.request.user.id or x.private==False]
+        #raise AssertionError(queryset)
         return queryset
 
     def get_serializer_class(self):
