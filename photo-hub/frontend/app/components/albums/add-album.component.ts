@@ -22,10 +22,8 @@ export class AddAlbumComponent implements OnInit{
                 public notificationService: NotificationService,
                 public router: Router) { }
 
-    log(){console.log(this._private)}
     create(): void {
         this.dataService.createAlbum(this._title, this._private).subscribe((album: IAlbum) =>{
-                console.log(album)
                 this.notificationService.printSuccessMessage(this._title + " album created!");
                 this.router.navigate(['/albums'], {queryParams: {user_id: this.dataService.getCurrentUserId()}});
             },

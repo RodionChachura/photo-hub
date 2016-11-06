@@ -3,4 +3,5 @@ export interface IUser {
     username: string;
     totalAlbums: number;
     totalPhotos: number;
+    totalLikes: number;
 }

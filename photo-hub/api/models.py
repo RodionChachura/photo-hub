@@ -13,6 +13,18 @@ class Album(models.Model):
     creation_date = models.DateField(auto_now_add=True)
     private = models.BooleanField(default=False)
     
+    @property
+    def total_photos(self):
+        try:
+            return Photo.objects.filter(album_id=self.id).count()
+        except Photo.DoesNotExist:
+            return 0
+
+    @property 
+    def total_likes(self):
+        photos = Photo.objects.filter(album_id=self.id)
+        return sum(x.total_likes for x in photos)
+
     def __str__(self):
         return self.title
 
@@ -27,6 +39,13 @@ class Photo(models.Model):
     creation_date = models.DateField(auto_now_add=True)
 
     @property
+    def total_likes(self):
+        try:
+            return Like.objects.filter(photo_id=self.id).count()
+        except Like.DoesNotExist:
+            return 0
+
+    @property
     def private(self):
         if self.album:
             return self.album.private
@@ -37,3 +56,7 @@ class Photo(models.Model):
 
     class Meta:
         ordering = ['-creation_date', ]
+
+class Like(models.Model):
+    photo = models.ForeignKey(Photo, related_name="likes", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)

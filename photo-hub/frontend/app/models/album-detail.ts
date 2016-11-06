@@ -6,6 +6,7 @@ export interface IAlbumDetail {
     creationDate: Date;
     photos: IPhoto[];
     totalPhotos: number;
+    totalLikes: number;
     userId: number;
     username: string;
     thumbnail: string;

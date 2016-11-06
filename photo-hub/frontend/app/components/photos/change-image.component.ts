@@ -39,21 +39,22 @@ export class ChangeImageComponent implements OnInit {
                     this._albums = albums;
                     if(this._albums.length != 0){
                         // really bad code!
-                        this._albums.push({id: 0, title: this._noAlbum, creationDate: Date.prototype, totalPhotos: 0, userId: 0, username: '', thumbnail: ''})
+                        this._albums.push({id: 0, title: this._noAlbum, creationDate: Date.prototype, totalPhotos: 0, totalLikes: 0, userId: 0, username: '', thumbnail: ''})
                     }
                 });
     }
 
     change(): void {
-        if(this._albumId == 0){
-            this.dataService.createPhoto(this._photoId, this._title, (this._albumId==0)? null : this._albumId)
-                .subscribe(res =>{
-                    this.notificationService.printSuccessMessage("Photo changed!");
+        this.dataService.updatePhoto(this._photoId, this._title, (this._albumId==0)? null : this._albumId)
+            .subscribe(res =>{
+                if(this._albumId == 0)
                     this.router.navigate(['/photos'], {queryParams: {user_id: this._userId}});
-                },
-                error=>{
-                    this.notificationService.printErrorMessage('Failed to change ' + this._title + ' photo : ' + error)
-                })
-        }
+                else
+                    this.router.navigate(['/albums', this._albumId]);
+                this.notificationService.printSuccessMessage("Photo changed!");
+            },
+            error=>{
+                this.notificationService.printErrorMessage('Failed to change ' + this._title + ' photo : ' + error)
+            })
     }
 }

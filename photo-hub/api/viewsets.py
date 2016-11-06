@@ -5,11 +5,12 @@ from rest_framework.decorators import detail_route
 from rest_framework.parsers import MultiPartParser, FormParser
 from djangorestframework_camel_case.parser import CamelCaseJSONParser
 from django.contrib.auth.models import User
+from rest_framework import status 
 
 from django.db.models import Q
 
 from api.permissions import IsOwnerOrReadOnly
-from api.models import Photo, Album
+from api.models import Photo, Album, Like
 from api.serializers import PhotoSerializer, AlbumSerializer, AlbumDetailSerializer, UserSerializer
 
 
@@ -17,7 +18,13 @@ class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     parser_classes = (MultiPartParser, FormParser, CamelCaseJSONParser)
-    permission_classes = (IsOwnerOrReadOnly, permissions.IsAuthenticated)
+
+    def get_permissions(self):
+        if hasattr(self, 'action') and self.action == 'set_like':
+            self.permission_classes = [permissions.IsAuthenticated]
+        else:
+            self.permission_classes = [IsOwnerOrReadOnly, permissions.IsAuthenticated]
+        return super(PhotoViewSet, self).get_permissions()
 
     def get_queryset(self):
         queryset = Photo.objects.all()
@@ -31,7 +38,10 @@ class PhotoViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         if 'album_id' in self.request.data:
-            serializer.save(user=self.request.user, album_id = self.request.data['album_id'])
+            try:
+                serializer.save(user=self.request.user, album_id = self.request.data['album_id'])
+            except:
+                serializer.save(user=self.request.user, album_id = None)
         else:
             serializer.save(user=self.request.user)
 
@@ -40,9 +50,27 @@ class PhotoViewSet(viewsets.ModelViewSet):
         # to serializer with changed naem, in other circumstances this work
         # done using CamelCaseJSONParser
         if 'albumId' in self.request.data:
-            serializer.save(user=self.request.user, album_id = self.request.data['albumId'])
+            try:
+                serializer.save(user=self.request.user, album_id = self.request.data['albumId'])
+            except:
+                serializer.save(user=self.request.user, album_id = None)
         else:
             serializer.save(user=self.request.user)
+
+    @detail_route(methods=['post'])
+    def set_like(self, request, pk=None):
+        user_id = self.request.data['user_id']
+        user = User.objects.get(id=user_id)
+        photo = Photo.objects.get(id=pk)
+        if user_id == photo.user_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if Like.objects.filter(user_id=user_id, photo_id=photo.id).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            like = Like(photo=photo, user=user)
+            like.save()
+            return Response(status=status.HTTP_200_OK)
+            
 
 class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
@@ -55,8 +83,6 @@ class AlbumViewSet(viewsets.ModelViewSet):
         if user_id != None:
             queryset = queryset.filter(user_id=user_id)
         queryset = queryset.filter(Q(user_id=user.id) | Q(private=False))
-        #queryset = [x for x in queryset if x.user_id==self.request.user.id or x.private==False]
-        #raise AssertionError(queryset)
         return queryset
 
     def get_serializer_class(self):

@@ -7,4 +7,5 @@ export interface IPhoto {
     albumTitle: string;
     userId: number;
     username: string;
+    totalLikes: number;
 }

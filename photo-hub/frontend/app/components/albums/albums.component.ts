@@ -36,23 +36,24 @@ export class AlbumsComponent implements OnInit{
             this.dataService.getUserAlbums(this._userId)
                 .subscribe((albums: IAlbum[]) => {
                     this._albums = albums;
-                    console.log(this._albums)
+                    if (this._userId == this.dataService.getCurrentUserId()){
+                        this._username = this.dataService.getCurrentUserUsername()
+                        this._isOwner = true;
+                    }
+                    else{
+                        if(this._albums.length > 0){
+                            this._username = this._albums[0].username;
+                        }
+                        else{
+                            this.router.navigate(['/users']);
+                            this.notificationService.printErrorMessage("this user doesn't have any albums. How you appear here?")
+                        }
+                    }
                     this.fancyboxOn();
                 },
                 error => {
                     this.notificationService.printErrorMessage('Failed to load albums. ' + error);
                 });
-            if (this._userId == this.dataService.getCurrentUserId()){
-                this._username = this.dataService.getCurrentUserUsername()
-                this._isOwner = true;
-            }
-            else{
-                if(this._albums.length > 0){
-                    this._username = this._albums[0].username;
-                }
-                this.router.navigate(['/users']);
-                this.notificationService.printErrorMessage("this user doesn't have any albums. How you appear here?")
-            }
         }
     }
 

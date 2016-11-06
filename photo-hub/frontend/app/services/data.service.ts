@@ -37,7 +37,6 @@ export class DataService {
     getUsers(): Observable<IUser[]>{
         return this.http.get(this.apiUri + 'users', this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
             .catch(this.handleError);
@@ -46,7 +45,6 @@ export class DataService {
     getUserAlbums(userId): Observable<IAlbum[]>{
         return this.http.get(this.apiUri + 'albums' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {
-                console.log(res);
                 return res.json();
             })
             .catch(this.handleError);
@@ -80,7 +78,6 @@ export class DataService {
     // CREATE 
     createAlbum(title: string, _private: boolean): Observable<IAlbum>{
         let json = JSON.stringify({ title: title, private: _private});
-        console.log(json);
         return this.http.post(this.apiUri + 'albums', json, this.headers())
             .map((res: Response) => {
                 return res.json();
@@ -98,6 +95,15 @@ export class DataService {
                 return res.json();
             })
             .catch(this.handleError);
+    }
+
+    createLike(photoId: number): Observable<void>{
+        let json = JSON.stringify({userId: this.getCurrentUserId()});
+        return this.http.post(this.apiUri + 'photos/' + photoId + '/set_like', json, this.headers())
+            .map((res: Response) => {
+                return res;
+            })
+        .catch(this.handleError);
     }
 
     // DELETE
@@ -121,7 +127,7 @@ export class DataService {
     
     updateAlbum(id: number, title: string): Observable<void>{
         let json = JSON.stringify({id: id, title: title});
-        return this.http.patch(this.apiUri + 'albums/', json, this.headers())
+        return this.http.patch(this.apiUri + 'albums/' + id, json, this.headers())
             .map((res: Response) => {
                 return;
             })
@@ -130,7 +136,6 @@ export class DataService {
     
     updatePhoto(id: number, title: string, albumId: number) {
         var json =  JSON.stringify({title: title, albumId: albumId});
-        
         return this.http.patch(this.apiUri + 'photos/' + id, json, this.headers())
             .map((res: Response) => {
                 return;
@@ -144,7 +149,6 @@ export class DataService {
         var modelStateErrors: string = '';
 
         if (!serverError.type) {
-            console.log(serverError);
             for (var key in serverError) {
                 if (serverError[key])
                     modelStateErrors += serverError[key] + '\n';

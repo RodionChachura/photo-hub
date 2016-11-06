@@ -33,23 +33,25 @@ export class PhotosComponent implements OnInit{
             .subscribe((photos: IPhoto[]) => {
                 this._photos = photos;
                 this.fancyboxOn();
+                if (this._userId == this.dataService.getCurrentUserId()){
+                    this._isOwner = true;
+                    this._username = this.dataService.getCurrentUserUsername()
+                }
+                else{
+                    if(this._photos.length > 0){
+                        this._username = this._photos[0].username;
+                    }
+                    else{
+                        this.router.navigate(['/users']);
+                        this.notificationService.printErrorMessage("this user doesn't have any photo. How you appear here?")
+                    }
+                }
+
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load photos. ' + error);
             });
-        if (this._userId == this.dataService.getCurrentUserId()){
-            this._isOwner = true;
-            this._username = this.dataService.getCurrentUserUsername()
-        }
-        else{
-            if(this._photos.length > 0){
-                this._username = this._photos[0].username;
-            }
-            else{
-                this.router.navigate(['/users']);
-                this.notificationService.printErrorMessage("this user doesn't have any photo. How you appear here?")
-            }
-        }
+        
     }
 
     fancyboxOn(){
@@ -61,7 +63,7 @@ export class PhotosComponent implements OnInit{
         });
     }
 
-    delete(photo){
+    delete(photo: IPhoto){
         this.dataService.deletePhoto(photo.id).subscribe((res) => {
                 var index = this._photos.indexOf(photo, 0);
                 if (index > -1) {
@@ -71,6 +73,19 @@ export class PhotosComponent implements OnInit{
             error => {
                 this.notificationService.printErrorMessage('Failed to delete ' + photo.title + ' ' + error);
             });
+    }
+
+    like(photo: IPhoto){
+        if (photo.userId == this.dataService.getCurrentUserId())
+        {
+            this.notificationService.printSuccessMessage("You can't like your photos")
+        }
+        else
+        {
+            this.dataService.createLike(photo.id).subscribe((res) => {
+                    photo.totalLikes++;
+                });
+        }
     }
 
     convertDateTime(date: Date) {

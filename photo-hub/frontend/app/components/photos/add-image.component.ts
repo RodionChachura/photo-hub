@@ -31,7 +31,7 @@ export class AddImageComponent implements OnInit {
                     this._albums = albums;
                     if(this._albums.length != 0){
                         // really bad code!
-                        this._albums.push({id: 0, title: this._noAlbum, creationDate: Date.prototype, totalPhotos: 0, userId: 0, username: '', thumbnail: ''})
+                        this._albums.push({id: 0, title: this._noAlbum, creationDate: Date.prototype, totalPhotos: 0, totalLikes:0, userId: 0, username: '', thumbnail: ''})
                         this._albumId = 0;
                     }
                 });
@@ -49,7 +49,10 @@ export class AddImageComponent implements OnInit {
             let fileToUpload = fi.files[0];
             this.dataService.createPhoto(fileToUpload, this._title, (this._albumId == 0)? null: this._albumId)
                 .subscribe(res => {
-                    this.router.navigate(['/albums'], {queryParams: {user_id: this._userId}});
+                    if(this._albumId == 0)
+                        this.router.navigate(['/photos'], {queryParams: {user_id: this._userId}});
+                    else
+                        this.router.navigate(['/albums', this._albumId]);
                     this.notificationService.printSuccessMessage(this._title + ' uploaded!');
                 },
                 error => {

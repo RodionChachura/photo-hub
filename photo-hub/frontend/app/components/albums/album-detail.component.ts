@@ -60,6 +60,21 @@ export class AlbumDetailComponent implements OnInit{
             });
     }
 
+    like(photo: IPhoto){
+        if (photo.userId == this.dataService.getCurrentUserId())
+        {
+            this.notificationService.printSuccessMessage("You can't like your photos")
+        }
+        else
+        {
+            this.dataService.createLike(photo.id).subscribe((res) => {
+                    console.log(photo);
+                    photo.totalLikes++;
+                    console.log(photo);
+                });
+        }
+    }
+
     convertDateTime(date: Date) {
         return this.utilityService.convertDateTime(date);
     }

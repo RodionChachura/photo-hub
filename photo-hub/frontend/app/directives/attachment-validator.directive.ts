@@ -14,10 +14,6 @@ export class AttachmentValidator implements Validator{
     
         if(c.dirty && c.value && c.value.length == 0){
             state = true;
-            console.log(c.value)
-            console.log(c.dirty)
-            console.log(c.value.length)
-            console.log(state)
         }
         
         return state ? { required : { 'required' : false } } : null

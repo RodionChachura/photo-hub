@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-4">
                     <h3>{{user.username}}</h3>
-                    <p>Likes: 0</p>
+                    <p>Likes: {{user.totalLikes}}</p>
             </div>
             <div class="col-md-2">
                 <a *ngIf="user.totalAlbums > 0" [routerLink]="['/albums']" [queryParams]="{user_id: user.id}">Albums: <span class="badge">{{user.totalAlbums}}</span></a>

@@ -31,7 +31,6 @@ export class ChangeAlbumComponent implements OnInit {
                 public notificationService: NotificationService) { }
 
     change(): void {
-        console.log('change clicked!')
         this.dataService.updateAlbum(this._albumId, this._title)
             .subscribe(res =>{
                 this.notificationService.printSuccessMessage("Album changed!");
