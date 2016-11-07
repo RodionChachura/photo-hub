@@ -15,7 +15,6 @@ import 'rxjs/add/operator/catch';
  
 @Injectable()
 export class DataService {
-    public apiUri = 'http://localhost:8000/api/';
 
     constructor(private http: Http,
         private utilityService: UtilityService,
@@ -36,7 +35,7 @@ export class DataService {
 
     // GET 
     getUsers(): Observable<IUser[]>{
-        return this.http.get(this.apiUri + 'users', this.headers())
+        return this.http.get('api/users', this.headers())
             .map((res: Response) => {
                 return res.json();
             })
@@ -44,7 +43,7 @@ export class DataService {
     }
     
     getUserAlbums(userId): Observable<IAlbum[]>{
-        return this.http.get(this.apiUri + 'albums' + '?user_id=' + userId, this.headers())
+        return this.http.get('api/albums' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {
                 return res.json();
             })
@@ -52,7 +51,7 @@ export class DataService {
     }
 
     getUserAlbumsForSelection(userId): Observable<IAlbumForSelection[]>{
-        return this.http.get(this.apiUri + 'albums' + '?user_id=' + userId, this.headers())
+        return this.http.get('api/albums' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {
                 return res.json();
             })
@@ -60,7 +59,7 @@ export class DataService {
     }
 
     getUserPhotos(userId): Observable<IPhoto[]>{
-        return this.http.get(this.apiUri + 'photos' + '?user_id=' + userId, this.headers())
+        return this.http.get('api/photos' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {
                 return res.json();
             })
@@ -69,7 +68,7 @@ export class DataService {
 
     // GET /id
     getAlbum(id): Observable<IAlbumDetail>{
-        return this.http.get(this.apiUri + 'albums/' + id, this.headers())
+        return this.http.get('api/albums/' + id, this.headers())
             .map((res: Response) => {
                 return res.json();
             })
@@ -77,7 +76,7 @@ export class DataService {
     }
 
     getPhoto(id): Observable<IPhoto>{
-       return this.http.get(this.apiUri + 'photos/' + id, this.headers())
+       return this.http.get('api/photos/' + id, this.headers())
             .map((res: Response) => {
                 return res.json();
             })
@@ -87,7 +86,7 @@ export class DataService {
     // CREATE 
     createAlbum(title: string, _private: boolean): Observable<IAlbum>{
         let json = JSON.stringify({ title: title, private: _private});
-        return this.http.post(this.apiUri + 'albums', json, this.headers())
+        return this.http.post('api/albums', json, this.headers())
             .map((res: Response) => {
                 return res.json();
             })
@@ -99,7 +98,7 @@ export class DataService {
         input.append("image", image);
         input.append("title", title);
         input.append("albumId", albumId);
-        return this.http.post(this.apiUri + 'photos', input, this.headers(true))
+        return this.http.post('api/photos', input, this.headers(true))
             .map((res: Response) => {
                 return res.json();
             })
@@ -108,7 +107,7 @@ export class DataService {
 
     createLike(photoId: number): Observable<void>{
         let json = JSON.stringify({userId: this.getCurrentUserId()});
-        return this.http.post(this.apiUri + 'photos/' + photoId + '/set_like', json, this.headers())
+        return this.http.post('api/photos/' + photoId + '/set_like', json, this.headers())
             .map((res: Response) => {
                 return res;
             })
@@ -117,7 +116,7 @@ export class DataService {
 
     // DELETE
     deleteAlbum(id: number): Observable<void> {
-        return this.http.delete(this.apiUri + 'albums/' + id, this.headers())
+        return this.http.delete('api/albums/' + id, this.headers())
             .map((res: Response) => {
                 return;
             })
@@ -125,7 +124,7 @@ export class DataService {
     }
 
     deletePhoto(id: number): Observable<void> {
-        return this.http.delete(this.apiUri + 'photos/' + id, this.headers())
+        return this.http.delete('api/photos/' + id, this.headers())
             .map((res: Response) => {
                 return;
             })
@@ -136,7 +135,7 @@ export class DataService {
     
     updateAlbum(id: number, title: string): Observable<void>{
         let json = JSON.stringify({id: id, title: title});
-        return this.http.patch(this.apiUri + 'albums/' + id, json, this.headers())
+        return this.http.patch('api/albums/' + id, json, this.headers())
             .map((res: Response) => {
                 return;
             })
@@ -145,7 +144,7 @@ export class DataService {
     
     updatePhoto(id: number, title: string, albumId: number) {
         var json =  JSON.stringify({title: title, albumId: albumId});
-        return this.http.patch(this.apiUri + 'photos/' + id, json, this.headers())
+        return this.http.patch('api/photos/' + id, json, this.headers())
             .map((res: Response) => {
                 return;
             })
@@ -162,6 +161,11 @@ export class DataService {
                 if (serverError[key])
                     modelStateErrors += serverError[key] + '\n';
             }
+        }
+
+        // if status unauthorized => logout
+        if (error.status == 401){
+            localStorage.removeItem('currentUser');
         }
 
         modelStateErrors = modelStateErrors = '' ? null : modelStateErrors;

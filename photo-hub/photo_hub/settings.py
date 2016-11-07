@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'corsheaders',
     'api',
     'frontend',
 ]
@@ -131,9 +130,4 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(weeks=4)
 }
-
-CORS_ORIGIN_WHITELIST = (
-    'localhost:8000',
-    '127.0.0.1:8000'
-)
 

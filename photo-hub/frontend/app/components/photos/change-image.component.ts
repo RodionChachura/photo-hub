@@ -32,7 +32,9 @@ export class ChangeImageComponent implements OnInit {
         this.dataService.getPhoto(this._photoId)
             .subscribe((photo: IPhoto) => {
                 this._title = photo.title;
-                this._albumId = photo.albumId;
+                if(photo.albumId != null){
+                    this._albumId = photo.albumId;
+                }
             })
         this.dataService.getUserAlbums(this._userId)
             .subscribe((albums: IAlbumForSelection[]) => {
