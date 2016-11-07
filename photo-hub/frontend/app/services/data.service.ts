@@ -6,6 +6,7 @@ import { NotificationService } from './notification.service'
 import { IUser } from '../models/user'
 import { IAlbum } from '../models/album'
 import { IAlbumDetail } from '../models/album-detail'
+import { IAlbumForSelection } from '../models/album-selection'
 import { IPhoto } from '../models/photo'
 
 import { Observable } from 'rxjs/Observable';
@@ -43,6 +44,14 @@ export class DataService {
     }
     
     getUserAlbums(userId): Observable<IAlbum[]>{
+        return this.http.get(this.apiUri + 'albums' + '?user_id=' + userId, this.headers())
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(this.handleError);
+    }
+
+    getUserAlbumsForSelection(userId): Observable<IAlbumForSelection[]>{
         return this.http.get(this.apiUri + 'albums' + '?user_id=' + userId, this.headers())
             .map((res: Response) => {
                 return res.json();

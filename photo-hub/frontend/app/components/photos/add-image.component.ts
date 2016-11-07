@@ -3,7 +3,7 @@ import { Router, ActivatedRoute }  from '@angular/router';
 
 import { DataService } from '../../services/data.service'
 import { NotificationService } from '../../services/notification.service';
-import { IAlbum } from '../../models/album';
+import { IAlbumForSelection } from '../../models/album-selection';
 
 
 @Component({
@@ -14,7 +14,7 @@ export class AddImageComponent implements OnInit {
     private _title: string;
     private _attachment: boolean;
     private _userId: number;
-    private _albums: IAlbum[];
+    private _albums: IAlbumForSelection[];
     private _albumId: number;
     private _noAlbum: string = "No album"
     @ViewChild("photo") photo;
@@ -27,11 +27,11 @@ export class AddImageComponent implements OnInit {
     ngOnInit() {
         this._userId = this.dataService.getCurrentUserId();
         this.dataService.getUserAlbums(this._userId)
-            .subscribe((albums: IAlbum[]) => {
+            .subscribe((albums: IAlbumForSelection[]) => {
                     this._albums = albums;
                     if(this._albums.length != 0){
                         // really bad code!
-                        this._albums.push({id: 0, title: this._noAlbum, creationDate: Date.prototype, totalPhotos: 0, totalLikes:0, userId: 0, username: '', thumbnail: ''})
+                        this._albums.push({id: 0, title: this._noAlbum})
                         this._albumId = 0;
                     }
                 });

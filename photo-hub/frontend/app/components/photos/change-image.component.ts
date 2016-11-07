@@ -3,7 +3,7 @@ import { Router, ActivatedRoute }  from '@angular/router';
 
 import { DataService } from '../../services/data.service'
 import { NotificationService } from '../../services/notification.service';
-import { IAlbum } from '../../models/album';
+import { IAlbumForSelection } from '../../models/album-selection';
 import { IPhoto } from '../../models/photo';
 
 
@@ -14,7 +14,7 @@ import { IPhoto } from '../../models/photo';
 export class ChangeImageComponent implements OnInit {
     private _title: string;
     private _userId: number;
-    private _albums: IAlbum[];
+    private _albums: IAlbumForSelection[];
     private _photoId: number;
     private _albumId: number = 0;
     private _noAlbum: string = "No album";
@@ -35,11 +35,10 @@ export class ChangeImageComponent implements OnInit {
                 this._albumId = photo.albumId;
             })
         this.dataService.getUserAlbums(this._userId)
-            .subscribe((albums: IAlbum[]) => {
+            .subscribe((albums: IAlbumForSelection[]) => {
                     this._albums = albums;
                     if(this._albums.length != 0){
-                        // really bad code!
-                        this._albums.push({id: 0, title: this._noAlbum, creationDate: Date.prototype, totalPhotos: 0, totalLikes: 0, userId: 0, username: '', thumbnail: ''})
+                        this._albums.push({id: 0, title: this._noAlbum})
                     }
                 });
     }
