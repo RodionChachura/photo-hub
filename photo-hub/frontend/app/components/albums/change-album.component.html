@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-lg btn-block" (click)="change()"[disabled]="!albumForm.form.valid">Change</button>
+                        <button class="btn btn-primary btn-lg btn-block" (click)="change()"[disabled]="!albumForm.form.valid || _disabled">Change</button>
                     </div>
                 </form>
             </div>

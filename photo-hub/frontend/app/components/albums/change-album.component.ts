@@ -14,6 +14,7 @@ export class ChangeAlbumComponent implements OnInit {
     private _albumId: number;
     private _title: string;
     private _userId: number;
+    private _disabled: boolean;
 
     ngOnInit(){
         this.route.params.subscribe(params =>{
@@ -31,13 +32,14 @@ export class ChangeAlbumComponent implements OnInit {
                 public notificationService: NotificationService) { }
 
     change(): void {
+        this._disabled = true;
         this.dataService.updateAlbum(this._albumId, this._title)
             .subscribe(res =>{
                 this.notificationService.printSuccessMessage("Album changed!");
                 this.router.navigate(['/albums'], {queryParams: {user_id: this._userId}});
             },
             error=>{
-                this.notificationService.printErrorMessage('Failed to change ' + this._title + ' album : ' + error)
+                this.notificationService.printErrorMessage(error)
             })
     }
 }

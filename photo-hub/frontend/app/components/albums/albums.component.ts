@@ -16,8 +16,9 @@ declare var jQuery: any;
 export class AlbumsComponent implements OnInit{
     private _albums: IAlbum[];
     private _userId: number;
-    private _username: string
+    private _username: string;
     private _isOwner: boolean;
+    private _defaultThumbnail = 'static/images/thumbnail-default.png';
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -45,8 +46,8 @@ export class AlbumsComponent implements OnInit{
                             this._username = this._albums[0].username;
                         }
                         else{
-                            this.router.navigate(['/users']);
                             this.notificationService.printErrorMessage("this user doesn't have any albums. How you appear here?")
+                            this.router.navigate(['/users']);
                         }
                     }
                     this.fancyboxOn();

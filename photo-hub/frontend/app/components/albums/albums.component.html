@@ -31,10 +31,14 @@
             <a *ngIf="album.totalPhotos > 0" class="fancybox" rel="gallery" href="{{album.thumbnail}}" title="{{album.title}}">
                 <img class="media-object img-responsive album-thumbnail" src="{{album.thumbnail}}" alt="" />
             </a>
+            <a *ngIf="album.totalPhotos == 0" class="fancybox" rel="gallery" href="{{_defaultThumbnail}}" title="Empty Album">
+                <img class="media-object img-responsive album-thumbnail" src="{{_defaultThumbnail}}" alt="" />
+            </a>
         </div>
         <div class="col-md-6">
             <h3>
-                <a [routerLink]="['/albums', album.id]">{{album.title}}</a>
+                <a *ngIf="album.totalPhotos > 0 || _isOwner" [routerLink]="['/albums', album.id]">{{album.title}}</a>
+                <p *ngIf="album.totalPhotos == 0 && !_isOwner">{{album.title}}</p>
                 <div *ngIf="_isOwner" class="btn-group" role="group">
                     <button type="button" class="btn btn-danger" (click)="deleteAlbum(album)">
                         <i class="fa fa-trash-o"></i>
@@ -46,12 +50,12 @@
             </h3>
             <p>
                 Photos: <span class="badge"> {{album.totalPhotos}} </span>
-                <button *ngIf="!album.private" class="btn btn-xs btn-success">
+                <span *ngIf="!album.private" class="btn btn-xs btn-success" style="cursor:default;">
                     <span class="fa-stack fa-1x">
                         <i class="fa fa-thumbs-up fa-stack-2x fa-inverse"></i>
                     </span>
                     <span class="badge"> {{album.totalLikes}} </span>
-                </button>
+                </span>
                 <span *ngIf="album.private">
                     <span class="fa-stack fa-1x">
                         <i class="fa fa-thumbs-up fa-stack-2x"></i>

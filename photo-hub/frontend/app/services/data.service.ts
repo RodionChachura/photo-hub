@@ -166,6 +166,13 @@ export class DataService {
         // if status unauthorized => logout
         if (error.status == 401){
             localStorage.removeItem('currentUser');
+            return Observable.throw('Log in please :)');
+        }
+
+        // if status forbidden => logout
+        if (error.status == 403){
+            localStorage.removeItem('currentUser');
+            return Observable.throw("You tried to access secret data. Log in again.");
         }
 
         modelStateErrors = modelStateErrors = '' ? null : modelStateErrors;

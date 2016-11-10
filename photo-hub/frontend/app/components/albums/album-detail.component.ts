@@ -33,6 +33,11 @@ export class AlbumDetailComponent implements OnInit{
                 this._albumDetail = albumDetail;
                 this.fancyboxOn();
                 this._isOwner = albumDetail.userId == this.dataService.getCurrentUserId();
+                // if album doesn't have any photos and it is not album owner => redirect
+                if (!this._isOwner && albumDetail.photos.length == 0){
+                    this.notificationService.printErrorMessage("this album does not have any photos. How you appear here?")
+                    this.utilityService.navigate('/');
+                }
             },
             error => {
                 this.notificationService.printErrorMessage('Failed to load album: ' + error);

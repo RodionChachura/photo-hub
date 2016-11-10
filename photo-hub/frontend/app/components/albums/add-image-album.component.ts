@@ -16,6 +16,7 @@ export class AddImageAlbumComponent implements OnInit {
     private _attachment: boolean;
     private _albumId: number;
     private _userId: number;
+    private _disabled: boolean = false;
     @ViewChild("photo") photo;
 
     constructor(private route: ActivatedRoute,
@@ -39,15 +40,15 @@ export class AddImageAlbumComponent implements OnInit {
         let fi = this.photo.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            
+            this._disabled = true;
             this.dataService.createPhoto(fileToUpload, this._title, this._albumId)
                 .subscribe(res => {
                     this.router.navigate(['/albums', this._albumId]);
                     this.notificationService.printSuccessMessage(this._title + ' uploaded!');
                 },
                 error => {
-                this.notificationService.printErrorMessage('Failed to load image ' + error);
-            });
+                    this.notificationService.printErrorMessage(error);
+                });
         }
     }
 }

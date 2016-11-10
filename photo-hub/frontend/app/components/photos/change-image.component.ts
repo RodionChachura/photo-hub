@@ -18,6 +18,7 @@ export class ChangeImageComponent implements OnInit {
     private _photoId: number;
     private _albumId: number = 0;
     private _noAlbum: string = "No album";
+    private _disabled: boolean = true;
 
     constructor(private route: ActivatedRoute,
         public router: Router,
@@ -46,6 +47,7 @@ export class ChangeImageComponent implements OnInit {
     }
 
     change(): void {
+        this._disabled = true;
         this.dataService.updatePhoto(this._photoId, this._title, (this._albumId==0)? null : this._albumId)
             .subscribe(res =>{
                 if(this._albumId == 0)
@@ -55,7 +57,7 @@ export class ChangeImageComponent implements OnInit {
                 this.notificationService.printSuccessMessage("Photo changed!");
             },
             error=>{
-                this.notificationService.printErrorMessage('Failed to change ' + this._title + ' photo : ' + error)
+                this.notificationService.printErrorMessage(error)
             })
     }
 }

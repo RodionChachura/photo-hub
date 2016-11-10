@@ -14,6 +14,7 @@ export class AddAlbumComponent implements OnInit{
     private _title: string;
     private _private: boolean = false;
     private _userId: number;
+    private _disabled: boolean = false;
 
     ngOnInit(){
         this._userId = this.dataService.getCurrentUserId();
@@ -23,12 +24,13 @@ export class AddAlbumComponent implements OnInit{
                 public router: Router) { }
 
     create(): void {
+        this._disabled = true;
         this.dataService.createAlbum(this._title, this._private).subscribe((album: IAlbum) =>{
                 this.notificationService.printSuccessMessage(this._title + " album created!");
                 this.router.navigate(['/albums'], {queryParams: {user_id: this.dataService.getCurrentUserId()}});
             },
             error=>{
-                this.notificationService.printErrorMessage('Failed to create ' + this._title + ' album : ' + error)
+                this.notificationService.printErrorMessage(error)
             })
     }
 }

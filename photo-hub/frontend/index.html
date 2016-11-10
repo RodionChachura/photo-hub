@@ -13,32 +13,20 @@
     <link rel="stylesheet" href="{% static "bower_components/alertify.js/themes/alertify.bootstrap.css" %}"/>
     <link rel="stylesheet" href="{% static "styles.css" %}">
 
-    <!--Final attempt with fancybox-->
-    <!-- Add jQuery library -->
-    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
-    <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
-    <!-- Add mousewheel plugin (this is optional) -->
-    <script type="text/javascript" src="{% static "libs/fancybox/lib/jquery.mousewheel-3.0.6.pack.js" %}"></script>
-
-    <!-- Add fancyBox -->
     <link rel="stylesheet" href="{% static "libs/fancybox/source/jquery.fancybox.css" %}" type="text/css" media="screen"/>
-    <script type="text/javascript" src="{% static "libs/fancybox/source/jquery.fancybox.pack.js" %}"></script>
-
-    <!-- Optionally add helpers - button, thumbnail and/or media -->
     <link rel="stylesheet" href="{% static "libs/fancybox/source/helpers/jquery.fancybox-buttons.css" %}" type="text/css" media="screen" />
-    <script type="text/javascript" src="{% static "libs/fancybox/source/helpers/jquery.fancybox-buttons.js" %}"></script>
-    <script type="text/javascript" src="{% static "libs/fancybox/source/helpers/jquery.fancybox-media.js" %}"></script>
-
     <link rel="stylesheet" href="{% static "libs/fancybox/source/helpers/jquery.fancybox-thumbs.css" %}" type="text/css" media="screen" />
-    <script type="text/javascript" src="{% static "libs/fancybox/source/helpers/jquery.fancybox-thumbs.js" %}"></script>
-    <!--Final attempt with fancybox-->
 
 
-    <!--<script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>-->
+  </head>
+  <!-- 3. Display the application -->
+  <body>
+    <photohub></photohub>
+  </body>
+    <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+
     <script src="{% static "node_modules/bootstrap/dist/js/bootstrap.min.js" %}"></script>
     <script src="{% static "bower_components/alertify.js/lib/alertify.min.js" %}"></script>
-    
-
     <!-- 1. Load libraries -->
      <!-- Polyfill(s) for older browsers -->
     <script src="{% static "node_modules/core-js/client/shim.min.js" %}"></script>
@@ -50,9 +38,11 @@
     <script>
       System.import('app').catch(function(err){ console.error(err); });
     </script>
-  </head>
-  <!-- 3. Display the application -->
-  <body>
-    <photohub></photohub>
-  </body>
+  
+
+    <script src="{% static "libs/fancybox/lib/jquery.mousewheel-3.0.6.pack.js" %}"></script>
+    <script src="{% static "libs/fancybox/source/jquery.fancybox.pack.js" %}"></script>
+    <script src="{% static "libs/fancybox/source/helpers/jquery.fancybox-buttons.js" %}"></script>
+    <script src="{% static "libs/fancybox/source/helpers/jquery.fancybox-media.js" %}"></script>
+    <script src="{% static "libs/fancybox/source/helpers/jquery.fancybox-thumbs.js" %}"></script>
 </html>

@@ -49,7 +49,7 @@ export class PhotosComponent implements OnInit{
 
             },
             error => {
-                this.notificationService.printErrorMessage('Failed to load photos. ' + error);
+                this.notificationService.printErrorMessage(error);
             });
         
     }

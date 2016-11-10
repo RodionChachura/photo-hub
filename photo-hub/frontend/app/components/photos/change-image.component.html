@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-lg btn-block" (click)="change()" [disabled]="!title.valid">Change</button>
+                        <button class="btn btn-primary btn-lg btn-block" (click)="change()" [disabled]="!title.valid || _disabled">Change</button>
                     </div>
                 </form>
             </div>
