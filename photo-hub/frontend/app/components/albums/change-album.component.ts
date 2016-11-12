@@ -36,7 +36,7 @@ export class ChangeAlbumComponent implements OnInit {
         this.dataService.updateAlbum(this._albumId, this._title)
             .subscribe(res =>{
                 this.notificationService.printSuccessMessage("Album changed!");
-                this.router.navigate(['/albums'], {queryParams: {user_id: this._userId}});
+                this.router.navigate(['/albums', this._userId]);
             },
             error=>{
                 this.notificationService.printErrorMessage(error)

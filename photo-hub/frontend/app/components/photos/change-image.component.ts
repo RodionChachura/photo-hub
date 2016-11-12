@@ -5,6 +5,7 @@ import { DataService } from '../../services/data.service'
 import { NotificationService } from '../../services/notification.service';
 import { IAlbumForSelection } from '../../models/album-selection';
 import { IPhoto } from '../../models/photo';
+import { IPaginated } from '../../models/paginated';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class ChangeImageComponent implements OnInit {
                     this._albumId = photo.albumId;
                 }
             })
-        this.dataService.getUserAlbums(this._userId)
+        this.dataService.getUserAlbumsForSelection(this._userId)
             .subscribe((albums: IAlbumForSelection[]) => {
                     this._albums = albums;
                     if(this._albums.length != 0){
@@ -51,7 +52,7 @@ export class ChangeImageComponent implements OnInit {
         this.dataService.updatePhoto(this._photoId, this._title, (this._albumId==0)? null : this._albumId)
             .subscribe(res =>{
                 if(this._albumId == 0)
-                    this.router.navigate(['/photos'], {queryParams: {user_id: this._userId}});
+                    this.router.navigate(['/user-photos', this._userId]);
                 else
                     this.router.navigate(['/albums', this._albumId]);
                 this.notificationService.printSuccessMessage("Photo changed!");

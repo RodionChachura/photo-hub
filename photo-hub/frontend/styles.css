@@ -1,7 +1,8 @@
 /* TOP BAR - Footer Styles */
 body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    padding-top: 70px; /* Required padding for .navbar-fixed-top.*/ 
     background-color: whitesmoke;
+    padding-bottom: 70px; /* Required padding for .navbar-fixed-bottom. */ 
 }
 
 .navbar-inverse {

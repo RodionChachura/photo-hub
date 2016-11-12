@@ -3,6 +3,7 @@ from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.pagination import PageNumberPagination
 from djangorestframework_camel_case.parser import CamelCaseJSONParser
 from django.contrib.auth.models import User
 from rest_framework import status 
@@ -11,7 +12,7 @@ from django.db.models import Q
 
 from api.permissions import IsOwnerOrReadOnly
 from api.models import Photo, Album, Like
-from api.serializers import PhotoSerializer, AlbumSerializer, AlbumDetailSerializer, UserSerializer
+from api.serializers import PhotoSerializer, AlbumSerializer, AlbumDetailSerializer, AlbumTerseSerializer, UserSerializer
 
 
 class PhotoViewSet(viewsets.ModelViewSet):
@@ -88,6 +89,8 @@ class AlbumViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if hasattr(self, 'action') and self.action == 'retrieve':
             return AlbumDetailSerializer
+        if self.request.query_params.get('terse', False):
+            return AlbumTerseSerializer
         return AlbumSerializer
 
     def perform_create(self, serializer):

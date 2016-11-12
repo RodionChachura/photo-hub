@@ -125,6 +125,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.StandardPagination'
 }
 
 JWT_AUTH = {

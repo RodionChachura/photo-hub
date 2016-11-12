@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 from rest_framework_jwt.settings import api_settings
-from .serializers import RegisterSerializer
+from .auth.serializers import RegisterSerializer
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 import os

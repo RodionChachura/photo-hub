@@ -4,6 +4,7 @@ import { Router, ActivatedRoute }  from '@angular/router';
 import { DataService } from '../../services/data.service'
 import { NotificationService } from '../../services/notification.service';
 import { IAlbumForSelection } from '../../models/album-selection';
+import { IPaginated } from '../../models/paginated';
 
 
 @Component({
@@ -27,9 +28,10 @@ export class AddImageComponent implements OnInit {
 
     ngOnInit() {
         this._userId = this.dataService.getCurrentUserId();
-        this.dataService.getUserAlbums(this._userId)
+        this.dataService.getUserAlbumsForSelection(this._userId)
             .subscribe((albums: IAlbumForSelection[]) => {
                     this._albums = albums;
+                    console.log(albums)
                     if(this._albums.length != 0){
                         this._albums.push({id: 0, title: this._noAlbum})
                         this._albumId = 0;
@@ -52,7 +54,7 @@ export class AddImageComponent implements OnInit {
             this.dataService.createPhoto(fileToUpload, this._title, (this._albumId == 0)? null: this._albumId)
                 .subscribe(res => {
                     if(this._albumId == 0)
-                        this.router.navigate(['/photos'], {queryParams: {user_id: this._userId}});
+                        this.router.navigate(['/user-photos', this._userId]);
                     else
                         this.router.navigate(['/albums', this._albumId]);
                     this.notificationService.printSuccessMessage(this._title + ' uploaded!');

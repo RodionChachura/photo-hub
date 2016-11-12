@@ -13,7 +13,6 @@ import { UtilityService } from './services/utility.service'
 import { routing } from './app.routes';
 
 import { EqualValidator } from './directives/equal-validator.directive'
-import { AttachmentValidator } from './directives/attachment-validator.directive'
 
 import { AuthGuard } from './guards/auth.guard'
 
@@ -24,13 +23,13 @@ import { HomeComponent }  from './components/home/home.component';
 import { LoginComponent }  from './components/login/login.component';
 import { RegisterComponent }  from './components/register/register.component';
 
-import { AlbumsComponent }  from './components/albums/albums.component';
+import { UserAlbumsComponent }  from './components/albums/user-albums.component';
 import { AlbumDetailComponent }  from './components/albums/album-detail.component';
 import { AddAlbumComponent }  from './components/albums/add-album.component';
 import { AddImageAlbumComponent }  from './components/albums/add-image-album.component';
 import { ChangeAlbumComponent }  from './components/albums/change-album.component';
 
-import { PhotosComponent }  from './components/photos/photos.component';
+import { UserPhotosComponent }  from './components/photos/user-photos.component';
 import { AddImageComponent }  from './components/photos/add-image.component';
 import { ChangeImageComponent }  from './components/photos/change-image.component';
 
@@ -59,17 +58,16 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         HomeComponent,
         LoginComponent,
         RegisterComponent,
-        AlbumsComponent,
+        UserAlbumsComponent,
         AddAlbumComponent,
         AddImageAlbumComponent,
         ChangeAlbumComponent,
         AlbumDetailComponent,
-        PhotosComponent,
+        UserPhotosComponent,
         AddImageComponent,
         ChangeImageComponent,
         UsersComponent,
-        EqualValidator,
-        AttachmentValidator
+        EqualValidator
     ],
     providers: [
         AuthGuard,

@@ -2,10 +2,11 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
-            <h1 class="page-header">
-                {{_username}} albums
-                <button *ngIf="_isOwner" type="button" class="btn btn-success" [routerLink]="['/add-album']"><i class="fa fa-plus"></i></button>
-            </h1>
+                <h1 class="page-header">
+                    {{_username}} albums
+                    <button *ngIf="_isOwner" type="button" class="btn btn-success" [routerLink]="['/add-album']"><i class="fa fa-plus"></i></button>
+                </h1>
+            </div>
         </div>
     </div>
     <div *ngIf="_albums.length == 0" class="jumbotron">
@@ -69,3 +70,20 @@
     </div>
     <hr>
 </div>
+
+<footer *ngIf="_pagesCount > 1" class="navbar navbar-fixed-bottom">
+    <div class="text-center">
+        <div style="display:inline">
+            <ul class="pagination pagination-sm">
+                <li><a *ngIf="showLeftButtons()" (click)="search(1)"><<</a></li>
+                <li><a *ngIf="showLeftButtons()" (click)="search(_page-1)"><</a></li>
+                <li *ngFor="let n of numericButtons()" [ngClass]="{active: n == _page}">
+                    <a *ngIf="n != _page" (click)="search(n)">{{n}}</a>
+                    <span *ngIf="n == _page">{{n}}</span>
+                </li>
+                <li><a *ngIf="showRightButtons()" (click)="search(_page+1)">></a></li>
+                <li><a *ngIf="showRightButtons()" (click)="search(_pagesCount)">>></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>

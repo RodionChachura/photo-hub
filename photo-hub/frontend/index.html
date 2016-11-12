@@ -18,11 +18,6 @@
     <link rel="stylesheet" href="{% static "libs/fancybox/source/helpers/jquery.fancybox-thumbs.css" %}" type="text/css" media="screen" />
 
 
-  </head>
-  <!-- 3. Display the application -->
-  <body>
-    <photohub></photohub>
-  </body>
     <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
 
     <script src="{% static "node_modules/bootstrap/dist/js/bootstrap.min.js" %}"></script>
@@ -38,8 +33,12 @@
     <script>
       System.import('app').catch(function(err){ console.error(err); });
     </script>
+  </head>
+  <!-- 3. Display the application -->
+  <body>
+    <photohub></photohub>
+  </body>
   
-
     <script src="{% static "libs/fancybox/lib/jquery.mousewheel-3.0.6.pack.js" %}"></script>
     <script src="{% static "libs/fancybox/source/jquery.fancybox.pack.js" %}"></script>
     <script src="{% static "libs/fancybox/source/helpers/jquery.fancybox-buttons.js" %}"></script>

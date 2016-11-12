@@ -2,18 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router'; 
 
 import { IPhoto } from '../../models/photo';
+import { IPaginated } from '../../models/paginated'
 
 import { DataService } from '../../services/data.service';
 import { UtilityService } from '../../services/utility.service';
 import { NotificationService } from '../../services/notification.service';
+import { Paginated } from '../../shared/paginated' 
+
 
 declare var jQuery: any;
 
 @Component({
-    selector: 'photos',
-    templateUrl: 'static/app/components/photos/photos.component.html'
+    selector: 'user-photos',
+    templateUrl: 'static/app/components/photos/user-photos.component.html'
 })
-export class PhotosComponent implements OnInit{
+export class UserPhotosComponent extends Paginated implements OnInit{
     private _photos: IPhoto[];
     private _userId: number;
     private _username: string;
@@ -23,38 +26,51 @@ export class PhotosComponent implements OnInit{
         private router: Router,
         private dataService : DataService,
         private utilityService: UtilityService,
-        private notificationService: NotificationService) {}
+        private notificationService: NotificationService) {
+            super(1, 10);
+        }
 
     ngOnInit() {
-        this.route.queryParams.subscribe(params =>{
-            this._userId = params['user_id'] || null;
+        this.route.params.subscribe(params =>{
+            this._userId = params['id'];
         })
-        this.dataService.getUserPhotos(this._userId)
-            .subscribe((photos: IPhoto[]) => {
-                this._photos = photos;
-                this.fancyboxOn();
-                if (this._userId == this.dataService.getCurrentUserId()){
-                    this._isOwner = true;
-                    this._username = this.dataService.getCurrentUserUsername()
-                }
-                else{
-                    if(this._photos.length > 0){
-                        this._username = this._photos[0].username;
-                    }
-                    else{
-                        this.router.navigate(['/users']);
-                        this.notificationService.printErrorMessage("this user doesn't have any photo. How you appear here?")
-                    }
-                }
+        this.getPhotos(true);
+    }
 
+    private getPhotos(onStart: boolean = false): void {
+        this.dataService.getUserPhotos(this._userId, this._page, this._pageSize)
+            .subscribe((paginated: IPaginated<IPhoto>) => {
+                this._photos = paginated.results;
+                this._totalCount = paginated.count;
+                this.calculatePagesCount();
+
+                if (onStart){
+                    this.isOwnerStartLogic();
+                    this.fancyboxOn();
+                }
             },
             error => {
                 this.notificationService.printErrorMessage(error);
             });
-        
     }
 
-    fancyboxOn(){
+    private isOwnerStartLogic(): void {
+        if (this._userId == this.dataService.getCurrentUserId()){
+            this._username = this.dataService.getCurrentUserUsername()
+            this._isOwner = true;
+        }
+        else{
+            if(this._photos.length > 0){
+                this._username = this._photos[0].username;
+            }
+            else{
+                this.notificationService.printErrorMessage("this user doesn't have any photos. How you appear here?")
+                this.router.navigate(['/users']);
+            }
+        }
+    }
+
+    private fancyboxOn(){
         jQuery(document).ready(function(){ //Photos Gallery
             jQuery(".fancybox").fancybox({
                 openEffect: "elastic",
@@ -86,6 +102,11 @@ export class PhotosComponent implements OnInit{
                     photo.totalLikes++;
                 });
         }
+    }
+
+    search(i): void {
+        super.search(i);
+        this.getPhotos();
     }
 
     convertDateTime(date: Date) {

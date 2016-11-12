@@ -27,7 +27,7 @@ export class AddAlbumComponent implements OnInit{
         this._disabled = true;
         this.dataService.createAlbum(this._title, this._private).subscribe((album: IAlbum) =>{
                 this.notificationService.printSuccessMessage(this._title + " album created!");
-                this.router.navigate(['/albums'], {queryParams: {user_id: this.dataService.getCurrentUserId()}});
+                this.router.navigate(['/user-albums', this._userId]);
             },
             error=>{
                 this.notificationService.printErrorMessage(error)

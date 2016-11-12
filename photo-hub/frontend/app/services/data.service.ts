@@ -8,6 +8,7 @@ import { IAlbum } from '../models/album'
 import { IAlbumDetail } from '../models/album-detail'
 import { IAlbumForSelection } from '../models/album-selection'
 import { IPhoto } from '../models/photo'
+import { IPaginated } from '../models/paginated'
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -19,6 +20,14 @@ export class DataService {
     constructor(private http: Http,
         private utilityService: UtilityService,
         private notificationService: NotificationService) { }
+
+    getUrlForPagination(url: string, page: number, pageSize: number): string {
+        var query: string = url.includes('?')? '&page=' : '?page=';
+        if(pageSize)
+            return url + query + page + '&page_size=' + pageSize;
+        else
+            return url + query + page
+    }
 
     //from local storage
     getCurrentUserUsername(){
@@ -34,32 +43,33 @@ export class DataService {
     }
 
     // GET 
-    getUsers(): Observable<IUser[]>{
-        return this.http.get('api/users', this.headers())
+    getUsers(page: number, pageSize?: number): Observable<IPaginated<IUser>>{
+        return this.http.get(this.getUrlForPagination('api/users', page, pageSize), this.headers())
             .map((res: Response) => {
                 return res.json();
             })
             .catch(this.handleError);
     }
     
-    getUserAlbums(userId): Observable<IAlbum[]>{
-        return this.http.get('api/albums' + '?user_id=' + userId, this.headers())
+    getUserAlbums(userId: number, page: number, pageSize?: number): Observable<IPaginated<IAlbum>>{
+        return this.http.get(this.getUrlForPagination('api/albums?user_id=' + userId, page, pageSize), this.headers())
             .map((res: Response) => {
                 return res.json();
             })
             .catch(this.handleError);
     }
 
-    getUserAlbumsForSelection(userId): Observable<IAlbumForSelection[]>{
-        return this.http.get('api/albums' + '?user_id=' + userId, this.headers())
+    getUserAlbumsForSelection(userId: number): Observable<IAlbumForSelection[]>{
+        return this.http.get('api/albums?user_id=' + userId + '&terse=true', this.headers())
             .map((res: Response) => {
+                console.log(res);
                 return res.json();
             })
             .catch(this.handleError);
     }
 
-    getUserPhotos(userId): Observable<IPhoto[]>{
-        return this.http.get('api/photos' + '?user_id=' + userId, this.headers())
+    getUserPhotos(userId: number, page: number, pageSize?: number): Observable<IPaginated<IPhoto>>{
+        return this.http.get(this.getUrlForPagination('api/photos?user_id=' + userId, page, pageSize), this.headers())
             .map((res: Response) => {
                 return res.json();
             })
@@ -67,7 +77,7 @@ export class DataService {
     }
 
     // GET /id
-    getAlbum(id): Observable<IAlbumDetail>{
+    getAlbum(id: number): Observable<IAlbumDetail>{
         return this.http.get('api/albums/' + id, this.headers())
             .map((res: Response) => {
                 return res.json();
@@ -75,7 +85,7 @@ export class DataService {
             .catch(this.handleError);
     }
 
-    getPhoto(id): Observable<IPhoto>{
+    getPhoto(id: number): Observable<IPhoto>{
        return this.http.get('api/photos/' + id, this.headers())
             .map((res: Response) => {
                 return res.json();
@@ -173,6 +183,12 @@ export class DataService {
         if (error.status == 403){
             localStorage.removeItem('currentUser');
             return Observable.throw("You tried to access secret data. Log in again.");
+        }
+
+        // if status not found => startPage
+        if (error.status == 404){
+            this.utilityService.navigate('/');
+            return Observable.throw("This page does not exist");
         }
 
         modelStateErrors = modelStateErrors = '' ? null : modelStateErrors;

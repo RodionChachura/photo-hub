@@ -73,5 +73,22 @@
     </div>
 </div>
 
+<footer *ngIf="_pagesCount > 1" class="navbar navbar-fixed-bottom">
+    <div class="text-center">
+        <div style="display:inline">
+            <ul class="pagination pagination-sm">
+                <li><a *ngIf="showLeftButtons()" (click)="search(1)"><<</a></li>
+                <li><a *ngIf="showLeftButtons()" (click)="search(_page-1)"><</a></li>
+                <li *ngFor="let n of numericButtons()" [ngClass]="{active: n == _page}">
+                    <a *ngIf="n != _page" (click)="search(n)">{{n}}</a>
+                    <span *ngIf="n == _page">{{n}}</span>
+                </li>
+                <li><a *ngIf="showRightButtons()" (click)="search(_page+1)">></a></li>
+                <li><a *ngIf="showRightButtons()" (click)="search(_pagesCount)">>></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
 
 

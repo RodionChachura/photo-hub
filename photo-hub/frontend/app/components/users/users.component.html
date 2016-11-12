@@ -12,15 +12,15 @@
                 <i class="fa fa-user fa-4x"></i>
             </div>
             <div class="col-md-4">
-                    <h3>{{user.username}}</h3>
-                    <p>Likes: {{user.totalLikes}}</p>
+                <h3>{{user.username}}</h3>
+                <p>Likes: {{user.totalLikes}}</p>
             </div>
             <div class="col-md-2">
-                <a *ngIf="user.totalAlbums > 0" [routerLink]="['/albums']" [queryParams]="{user_id: user.id}">Albums: <span class="badge">{{user.totalAlbums}}</span></a>
+                <a *ngIf="user.totalAlbums > 0" [routerLink]="['/user-albums', user.id]">Albums: <span class="badge">{{user.totalAlbums}}</span></a>
                 <p *ngIf="user.totalAlbums == 0" >Albums: <span class="badge">{{user.totalAlbums}}</span></p>
             </div>
             <div class="col-md-2">
-                <a *ngIf="user.totalPhotos > 0" [routerLink]="['/photos']" [queryParams]="{user_id: user.id}">Photos: <span class="badge">{{user.totalPhotos}}</span></a>
+                <a *ngIf="user.totalPhotos > 0" [routerLink]="['/user-photos', user.id]">Photos: <span class="badge">{{user.totalPhotos}}</span></a>
                 <p *ngIf="user.totalPhotos == 0">Photos: <span class="badge">{{user.totalPhotos}}</span></p>
             </div>
         </div>
@@ -28,3 +28,20 @@
     </div>
     <hr>
 </div>
+
+<footer *ngIf="_pagesCount > 1" class="navbar navbar-fixed-bottom">
+    <div class="text-center">
+        <div style="display:inline">
+            <ul class="pagination pagination-sm">
+                <li><a *ngIf="showLeftButtons()" (click)="search(1)"><<</a></li>
+                <li><a *ngIf="showLeftButtons()" (click)="search(_page-1)"><</a></li>
+                <li *ngFor="let n of numericButtons()" [ngClass]="{active: n == _page}">
+                    <a *ngIf="n != _page" (click)="search(n)">{{n}}</a>
+                    <span *ngIf="n == _page">{{n}}</span>
+                </li>
+                <li><a *ngIf="showRightButtons()" (click)="search(_page+1)">></a></li>
+                <li><a *ngIf="showRightButtons()" (click)="search(_pagesCount)">>></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>

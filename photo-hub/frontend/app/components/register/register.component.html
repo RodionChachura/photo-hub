@@ -14,7 +14,7 @@
                 <form class="form col-md-12 center-block" #registerForm="ngForm">
                     <div class="form-group">
                         <input type="text" class="form-control input-lg" placeholder="Username" [(ngModel)]="_newUser.Username"
-                            required minlength="5" maxlength="20" pattern="^((?!@).)*$"
+                            required minlength="5" maxlength="30" pattern="^((?!@).)*$"
                             name="username" ngControl="username" #username="ngModel" />
                         <div [hidden]="username.valid || username.untouched" class="alert alert-danger">
                             <span *ngIf="username.errors && username.errors.required">
@@ -44,9 +44,10 @@
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control input-lg" placeholder="Password" [(ngModel)]="_newUser.Password"
-                               name="password" ngControl="password" required validateEqual="confirmPassword" reverse="true" #password="ngModel"/>
+                               minlength="6" maxlength="30" required 
+                               name="password" ngControl="password" validateEqual="confirmPassword" reverse="true" #password="ngModel"/>
                         <div [hidden]="password.valid || password.untouched" class="alert alert-danger">
-                            Password is required
+                            Password is required (6 symbols minimum)
                         </div>
                     </div>
                     <div class="form-group">
